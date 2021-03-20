@@ -1,4 +1,4 @@
-field = list(range(1, 10))
+import bot
 
 
 def WinCheck(field):
@@ -9,37 +9,34 @@ def WinCheck(field):
     return False
 
 
-def PlayerTurn(player_token):
+def PlayerTurn(player_token, field):
     valid_input = False
 
     while not valid_input:
-        player_input = input("Каков ход для " + player_token + "?(Номер ячейки) ")
-
-        try:
-            player_input = int(player_input)
-        except:
-            print("Введен не номер ячейки")
-            continue
+        bot.SendMessage("Каков ход для " + player_token + "?(Номер ячейки)")
+        player_input = bot.GetPlayerTurn('')
             
         if player_input >= 1 and player_input <= 9:
             if str(field[player_input - 1]) not in "XO":
                 field[player_input - 1] = player_token
                 valid_input = True
             else:
-                print("Поле уже занято")
+                bot.SendMessage("Поле уже занято")
         else:
-            print("Нет такой ячейки")
+            bot.SendMessage("Нет такой ячейки")
 
 
 def DrawField(field):
-    print("-------------")
+    field_representation = "-------------"
     for i in range(3):
-        print("|", field[0 + i*3], "|", field[1 + i*3],
-         "|", field[2 + i*3], "|")
-        print("-------------")
+        field_representation += "\n| {} | {} | {} |\n".format(field[0 + i*3], field[1 + i*3], field[2 + i*3])
+        field_representation += "-------------"
+    
+    bot.SendMessage(field_representation)
 
 
-def GameManager(field):
+def GameManager():
+    field = list(range(1,10))
     moves_count = 0
     is_gameOver = False
 
@@ -47,9 +44,9 @@ def GameManager(field):
         DrawField(field)
 
         if (moves_count % 2 == 0):
-            PlayerTurn("X")
+            PlayerTurn("X", field)
         else: 
-            PlayerTurn("O")
+            PlayerTurn("O", field)
         
         moves_count += 1
 
@@ -58,15 +55,14 @@ def GameManager(field):
 
             if game_status:
                 DrawField(field)
-                print(game_status)
+                bot.SendMessage(game_status)
                 is_gameOver = True
                 break
 
-        if (moves_count == 9):
-            print("Ничья!")
+        if (moves_count >= 9):
+            bot.SendMessage("Ничья!")
             is_gameOver = True
             break
 
 
-
-GameManager(field)
+# GameManager(field)
