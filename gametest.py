@@ -1,5 +1,5 @@
 import bot
-
+#Игра ждет ввода пользователя только в PlayerTurn.
 
 def WinCheck(field):
     winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))
@@ -14,7 +14,8 @@ def PlayerTurn(player_token, field):
 
     while not valid_input:
         bot.SendMessage("Каков ход для " + player_token + "?(Номер ячейки)")
-        player_input = bot.GetPlayerTurn('')
+
+        player_input = bot.GetPlayerTurn('') #ждет номер ячейки
             
         if player_input >= 1 and player_input <= 9:
             if str(field[player_input - 1]) not in "XO":
