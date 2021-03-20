@@ -41,11 +41,11 @@ def winline(x1,y1,x2,y2):
     im.save('pol2.jpg', quality=200)        
 
 
-circle(110,110)
-cross(320,110)
-cross(320,320)
-cross(320,530)
-winline(320,25,320,615)
+# circle(110,110)
+# cross(320,110)
+# cross(320,320)
+# cross(320,530)
+# winline(320,25,320,615)
 
 
 
