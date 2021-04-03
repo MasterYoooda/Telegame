@@ -22,9 +22,9 @@ def PlayerTurn(player_token, field):
                 field[player_input - 1] = player_token
                 valid_input = True
             else:
-                bot.SendMessage("Поле уже занято")
+                bot.SendMessage("Поле уже занято!")
         else:
-            bot.SendMessage("Нет такой ячейки")
+            bot.SendMessage("Нет такой ячейки!")
 
 
 def DrawField(field):
