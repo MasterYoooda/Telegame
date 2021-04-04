@@ -48,6 +48,7 @@ def inline(c):
             chat_id=c.message.chat.id,
             message_id=c.message.message_id,
             media=telebot.types.InputMediaPhoto(photo)
+            reply_markup=keyboards.game_keyboard
         )
     if c.data == 'two':
         testimages.cross(320,110)
