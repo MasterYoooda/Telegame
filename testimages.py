@@ -2,8 +2,12 @@ import math
 from PIL import Image, ImageDraw
 
 
-def circle(x,y):
-    im = Image.open('pol.jpg')
+def circle(point):
+    x, y = point[0], point[1]
+    try:
+        im = Image.open('pol2.jpg')
+    except:
+        im = Image.open('pol.jpg')
     draw = ImageDraw.Draw(im)
     r = 100
     draw.ellipse(
@@ -17,19 +21,23 @@ def circle(x,y):
 
 def cross(point):
     x, y = point[0], point[1]
-    im = Image.open('pol.jpg')
+    #<- критично сделить за завершением игры и удалять pol2.jpg
+    try:
+        im = Image.open('pol2.jpg')
+    except:
+        im = Image.open('pol.jpg')
+
     draw = ImageDraw.Draw(im)
+
     r = 100
     draw.line(
         xy=(x-r/math.sqrt(2),y-r/math.sqrt(2),x+r/math.sqrt(2),y+r/math.sqrt(2)),
         fill="black",
-        width=10
-    )
+        width=10)
     draw.line(
-    xy=(x+r/math.sqrt(2),y-r/math.sqrt(2),x-r/math.sqrt(2),y+r/math.sqrt(2)),
-    fill="black",
-    width=10
-    )
+        xy=(x+r/math.sqrt(2),y-r/math.sqrt(2),x-r/math.sqrt(2),y+r/math.sqrt(2)),
+        fill="black",
+        width=10)
     im.save('pol2.jpg', quality=200)        
 
 
@@ -44,11 +52,11 @@ def winline(x1,y1,x2,y2):
     im.save('pol2.jpg', quality=200)        
 
 
-circle(110,110)
-cross((320,110))
-cross((320,320))
-cross((320,530))
-winline(320,25,320,615)
+# circle(110,110)
+# cross((320,110))
+# cross((320,320))
+# cross((320,530))
+# winline(320,25,320,615)
 
 
 

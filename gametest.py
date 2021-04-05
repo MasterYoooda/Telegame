@@ -1,35 +1,52 @@
 import bot
-from transitions import Machine
-#Игра ждет ввода пользователя только в PlayerTurn.
+import random
 
-class Person(object):
-    pass
 
-def win_check(field):
-    winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))
+def win_check():
+    field = file_manager("read")
+    winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))    
+
     for each in winning_set:
         if field[each[0]] == field[each[1]] == field[each[2]]:
             return (field[each[0]] + " Победил!")
+
+    if (len(frozenset(field)) == 2):
+        return "Ничья!"
+        
     return False
 
 
-def player_turn(player_token, field):
-    valid_input = False
+def bot_turn(point_positions_keys, token):
+    is_suitable = False
+    turn = 0
+    while (not is_suitable):
+        turn =  random.randint(0,8)
+        #  путаница с bool: для одного False - хорошо, для другого - плохо
+        #<- Сделать отдельно обработку исключений и bool переменных 🧐? 
+        is_suitable = not player_turn(turn, token)
+    return point_positions_keys[turn]  #  возвращает текстовый ключ из словаря клеток 
 
-    while not valid_input:
 
-        player_input = 1 #bot.GetPlayerTurn('') #ждет номер ячейки
-            
-        if player_input >= 1 and player_input <= 9:
-            if str(field[player_input - 1]) not in "XO":
-                field[player_input - 1] = player_token
-                valid_input = True
-            else:
-                pass
-                # bot.SendMessage("Поле уже занято!")
-        else:
-            pass
-            # bot.SendMessage("Нет такой ячейки!")
+def player_turn(cell_number, token):        
+    field = file_manager("read")
+
+    if str(field[cell_number]) not in "XO":
+            field[cell_number] = token
+            file_manager("write", field)
+            return 0
+    else:
+        return "error" #<- в будущем надо заменить на класс исключений
+
+    # if player_input >= 1 and player_input <= 9:
+    #     if str(field[player_input - 1]) not in "XO":
+    #         field[player_input - 1] = player_token
+    #         valid_input = True
+    #     else:
+    #         pass
+    #         # bot.SendMessage("Поле уже занято!")
+    # else:
+    #     pass
+    #     # bot.SendMessage("Нет такой ячейки!")
 
 
 def draw_field(field):
@@ -43,36 +60,33 @@ def draw_field(field):
 
 def game_manager():
     field = list(range(1,10))
-    moves_count = 0
     file_manager("write", field)
-    is_gameOver = False
+    # while not is_gameOver:
+    #     draw_field(field)
 
-    while not is_gameOver:
-        draw_field(field)
-
-        if (moves_count % 2 == 0):
-            player_turn("X", field)
-        else: 
-            player_turn("O", field)
+    #     if (moves_count % 2 == 0):
+    #         player_turn("X", field)
+    #     else: 
+    #         player_turn("O", field)
         
-        moves_count += 1
+    #     moves_count += 1
 
-        if moves_count > 4:
-            game_status = win_check(field)
+    #     if moves_count > 4:
+    #         game_status = win_check(field)
 
-            if game_status:
-                draw_field(field)
-                # bot.SendMessage(game_status)
-                is_gameOver = True
-                break
+    #         if game_status:
+    #             draw_field(field)
+    #             # bot.SendMessage(game_status)
+    #             is_gameOver = True
+    #             break
 
-        if (moves_count >= 9):
-            # bot.SendMessage("Ничья!")
-            is_gameOver = True
-            break
+    #     if (moves_count >= 9):
+    #         # bot.SendMessage("Ничья!")
+    #         is_gameOver = True
+    #         break
 
 
-def file_manager(op, data):
+def file_manager(op, data = 0):
     if (op == "write"):
         file = open("game_data.txt", 'w')
 
@@ -81,6 +95,11 @@ def file_manager(op, data):
 
         file.close()
 
-    return 0
+    if (op == "read"):
+        file = open("game_data.txt", 'r')
+        field = file.readline().split(' ')
+        field.pop(len(field) - 1)#  удаление лишнего пробела
+        file.close()
+        return field     
 
-game_manager()
+    return 0
