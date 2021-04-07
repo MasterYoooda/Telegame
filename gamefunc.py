@@ -1,9 +1,9 @@
-import bot
+import gamemanager
 import random
 
 
 def win_check():
-    field = file_manager("read")
+    field = gamemanager.file_manager("read")
     winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))    
 
     for each in winning_set:
@@ -12,7 +12,7 @@ def win_check():
 
     if (len(frozenset(field)) == 2):
         return "Ничья!"
-        
+                
     return False
 
 
@@ -28,11 +28,11 @@ def bot_turn(point_positions_keys, token):
 
 
 def player_turn(cell_number, token):        
-    field = file_manager("read")
+    field = gamemanager.file_manager("read")
 
     if str(field[cell_number]) not in "XO":
             field[cell_number] = token
-            file_manager("write", field)
+            gamemanager.file_manager("write", field)
             return 0
     else:
         return "error" #<- в будущем надо заменить на класс исключений
@@ -49,18 +49,17 @@ def player_turn(cell_number, token):
     #     # bot.SendMessage("Нет такой ячейки!")
 
 
-def draw_field(field):
-    field_representation = "-------------"
-    for i in range(3):
-        field_representation += "\n| {} | {} | {} |\n".format(field[0 + i*3], field[1 + i*3], field[2 + i*3])
-        field_representation += "-------------"
-    
+# def draw_field(field):
+#     field_representation = "-------------"
+#     for i in range(3):
+#         field_representation += "\n| {} | {} | {} |\n".format(field[0 + i*3], field[1 + i*3], field[2 + i*3])
+#         field_representation += "-------------"    
     # bot.SendMessage(field_representation)
 
 
-def game_manager():
+def start_game():
     field = list(range(1,10))
-    file_manager("write", field)
+    gamemanager.file_manager("write", field)
     # while not is_gameOver:
     #     draw_field(field)
 
@@ -86,20 +85,4 @@ def game_manager():
     #         break
 
 
-def file_manager(op, data = 0):
-    if (op == "write"):
-        file = open("game_data.txt", 'w')
 
-        for d in data:
-            file.write(str(d) + " ")
-
-        file.close()
-
-    if (op == "read"):
-        file = open("game_data.txt", 'r')
-        field = file.readline().split(' ')
-        field.pop(len(field) - 1)#  удаление лишнего пробела
-        file.close()
-        return field     
-
-    return 0
