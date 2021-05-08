@@ -1,10 +1,11 @@
 import telebot
 import keyboards
 import gamemanager
+import telegramBotToken
 from telebot.types import Message
 
 
-bot = telebot.TeleBot("1632459413:AAGpEtpehyUJoEvHWlOE6FHWLjl1Mj3_uq8")
+bot = telebot.TeleBot(telegramBotToken.token)
 
 
 @bot.message_handler(commands=['start'])

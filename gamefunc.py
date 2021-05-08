@@ -37,52 +37,7 @@ def player_turn(cell_number, token):
     else:
         return "error" #<- в будущем надо заменить на класс исключений
 
-    # if player_input >= 1 and player_input <= 9:
-    #     if str(field[player_input - 1]) not in "XO":
-    #         field[player_input - 1] = player_token
-    #         valid_input = True
-    #     else:
-    #         pass
-    #         # bot.SendMessage("Поле уже занято!")
-    # else:
-    #     pass
-    #     # bot.SendMessage("Нет такой ячейки!")
-
-
-# def draw_field(field):
-#     field_representation = "-------------"
-#     for i in range(3):
-#         field_representation += "\n| {} | {} | {} |\n".format(field[0 + i*3], field[1 + i*3], field[2 + i*3])
-#         field_representation += "-------------"    
-    # bot.SendMessage(field_representation)
-
 
 def start_game():
     field = list(range(1,10))
     gamemanager.file_manager("write", field)
-    # while not is_gameOver:
-    #     draw_field(field)
-
-    #     if (moves_count % 2 == 0):
-    #         player_turn("X", field)
-    #     else: 
-    #         player_turn("O", field)
-        
-    #     moves_count += 1
-
-    #     if moves_count > 4:
-    #         game_status = win_check(field)
-
-    #         if game_status:
-    #             draw_field(field)
-    #             # bot.SendMessage(game_status)
-    #             is_gameOver = True
-    #             break
-
-    #     if (moves_count >= 9):
-    #         # bot.SendMessage("Ничья!")
-    #         is_gameOver = True
-    #         break
-
-
-
