@@ -1,11 +1,13 @@
 import telebot
 import keyboards
 import gamemanager
+import gamefunc
 import telegramBotToken
 from telebot.types import Message
 
 
 bot = telebot.TeleBot(telegramBotToken.token)
+game = gamefunc.Game()
 
 
 @bot.message_handler(commands=['start'])
@@ -39,6 +41,8 @@ def inline(c):
             gamemanager.mode_defined(c, c.data)           
         if c.data == 'cross':
             gamemanager.character_defined(c, 'X')
+        if c.data == 'zero':
+            gamemanager.character_defined(c, 'O')
 
 
 def message_send(c, text, keyboard = False):

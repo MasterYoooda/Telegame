@@ -17,11 +17,12 @@ class Circle(Figure):
             im = Image.open('pol.jpg')
 
         draw = ImageDraw.Draw(im)
+        r = 100
         draw.ellipse(
             xy=(x-r/math.sqrt(2),y-r/math.sqrt(2),x+r/math.sqrt(2),y+r/math.sqrt(2)),
             fill="white",
             outline="black",
-            # width=10
+            #width=10
         )
         im.save('pol2.jpg', quality=200)
 
@@ -50,7 +51,7 @@ class Cross(Figure):
 
 
 class WinLine():
-    def __call__(x1,y1,x2,y2):
+    def __call__(self, x1,y1,x2,y2):
         im = Image.open('pol2.jpg')
         draw = ImageDraw.Draw(im)
         draw.line(
@@ -99,13 +100,14 @@ class WinLine():
 
 
 circle = Circle()
-# circle([110,110])
+#circle([110,110])
 cross = Cross()
 # cross([320,110])
 # circle([110,110])
 # cross((320,110))
 # cross((320,320))
 # cross((320,530))
+winline = WinLine()
 # winline(320,25,320,615)
 
 
