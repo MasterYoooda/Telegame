@@ -8,7 +8,7 @@ class Figure():
 
 
 class Circle(Figure):
-    def __call__(self, point): 
+    def __call__(self, point:list): 
         x, y, r = point[0], point[1], 100
 
         try:
@@ -28,7 +28,7 @@ class Circle(Figure):
 
 
 class Cross(Figure):
-    def __call__(self, point):
+    def __call__(self, point:list):
         x, y = point[0], point[1]
         #<- критично сделить за завершением игры и удалять pol2.jpg
         try:
@@ -51,7 +51,8 @@ class Cross(Figure):
 
 
 class WinLine():
-    def __call__(self, x1,y1,x2,y2):
+    def __call__(self, line:list):
+        x1,y1,x2,y2 = line[0], line[1], line[2], line[3]
         im = Image.open('pol2.jpg')
         draw = ImageDraw.Draw(im)
         draw.line(

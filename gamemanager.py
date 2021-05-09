@@ -28,7 +28,7 @@ def mode_defined(c, mode):
     botfunc.game.game_mode = mode
     botfunc.message_send(
         c,
-        'Вы хотите ходить первым или вторым? Если хотите ходить первым - выберите крестики, вторым - нолики',
+        'Выберите, за кого хотите играть',
         keyboard=keyboards.priority_keyboard) 
 
 
@@ -59,10 +59,7 @@ def move_made(c):
             testimages.cross(botfunc.game.field.point_positions[c.data])
         else:
             testimages.circle(botfunc.game.field.point_positions[c.data])
-        
-        '''try:
-            botfunc.game.winCheck()
-        except:'''
+
         is_victory = gamefunc.win_check()
         if (not is_victory):
             bot_char = 'XO'.replace(getCharacter(c), '')
@@ -77,8 +74,8 @@ def move_made(c):
             botfunc.message_edit(c)
         else:
             #  если это победа, а не ничья
-            if ("Победил" in is_victory):
-                testimages.winline(320,25,320,615)
+            #if ("Победил" in is_victory):
+            #    testimages.winline(320,25,320,615)
 
             botfunc.message_edit(c, keyboard = False)
             botfunc.message_send(c, is_victory)

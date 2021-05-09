@@ -1,5 +1,6 @@
 import gamemanager
 import botfunc
+import testimages
 import random
 
 
@@ -15,6 +16,16 @@ class Field:
         '6' : (110,530),
         '7' : (320,530),
         '8' : (530,530)
+    }
+    winning_set = {
+        (0,1,2) : (25,25,615,25),
+        (3,4,5) : (25,320,615,320),
+        (6,7,8) : (25,615,615,615),
+        (0,3,6) : (25,25,25,615),
+        (1,4,7) : (320,25,320,615),
+        (2,5,8) : (615,25,615,615),
+        (0,4,8) : (25,25,615,615),
+        (2,4,6) : (615,25,25,615)
     }
 
 
@@ -94,10 +105,11 @@ class Game:
 
     def winCheck(self):
         field = self.field.fieldMap
-        winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))    
+        winning_set = list(self.field.winning_set.keys())   
 
         for each in winning_set:
             if field[each[0]] == field[each[1]] == field[each[2]]:
+                testimages.winline(self.field.winning_set[each])
                 raise gamemanager.GameExceptions(field[each[0]] + " Победил!")
 
         if (len(frozenset(field)) == 2):
@@ -108,10 +120,20 @@ class Game:
 
 def win_check():
     field = botfunc.game.field.fieldMap
-    winning_set = ((0,1,2),(3,4,5),(6,7,8),(0,3,6),(1,4,7),(2,5,8),(0,4,8),(2,4,6))    
+    winning_set = {
+        (0,1,2) : (25,25,615,25),
+        (3,4,5) : (25,320,615,320),
+        (6,7,8) : (25,615,615,615),
+        (0,3,6) : (25,25,25,615),
+        (1,4,7) : (320,25,320,615),
+        (2,5,8) : (615,25,615,615),
+        (0,4,8) : (25,25,615,615),
+        (2,4,6) : (615,25,25,615)
+    }    
 
-    for each in winning_set:
+    for each in list(winning_set.keys()):
         if field[each[0]] == field[each[1]] == field[each[2]]:
+            testimages.winline(winning_set[each])
             return (field[each[0]] + " Победил!")
 
     if (len(frozenset(field)) == 2):
