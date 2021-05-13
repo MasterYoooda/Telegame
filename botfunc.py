@@ -38,11 +38,17 @@ def inline(c):
             
     else:
         if c.data == 'mode_single':
-            gamemanager.mode_defined(c, c.data)           
+            game.modeDefined(c, c.data)   
+            botfunc.message_send(
+                c,
+                'Выберите, за кого хотите играть',
+                keyboard=keyboards.priority_keyboard)         
         if c.data == 'cross':
-            gamemanager.character_defined(c, 'X')
+            game.characterDefined(c, 'X')
+            botfunc.game.startGame()
+            botfunc.photo_send(c)
         if c.data == 'zero':
-            gamemanager.character_defined(c, 'O')
+            game.characterDefined(c, 'O')
 
 
 def message_send(c, text, keyboard = False):

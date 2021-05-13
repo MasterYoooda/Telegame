@@ -116,9 +116,68 @@ class Game:
             raise gamemanager.GameExceptions("Ничья!")
 
 
+    def modeDefined(self, c, mode):
+        self.game_mode = mode
+
+
+    def characterDefined(self, c, token):
+        self.players_list[token] = Player(c, token)
+        if (self.game_mode == 'mode_single'):
+            self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
+
+
+    def moveMade(self, c):
+        def getCharacter(c):
+            if self.players_list['X'].token != 0 and 
+                self.players_list['X'].token.message.chat.id == c.message.chat.id:
+                return 'X'
+            else:
+                return 'O'
+
+        try:
+            self.playerTurn(int(c.data), getCharacter(c))
+        except GameExceptions as g_exc:
+            botfunc.message_send(c, g_exc)
+        else:
+            if (getCharacter(c) == 'X'):
+                testimages.cross(botfunc.game.field.point_positions[c.data])
+            else:
+                testimages.circle(botfunc.game.field.point_positions[c.data])
+
+            try:
+                botfunc.game.winCheck()
+            except GameExceptions as g_exc:
+                botfunc.message_edit(c, keyboard=False)
+                botfunc.message_send(c, g_exc)
+            else:
+                bot_char = 'XO'.replace(getCharacter(C), '')
+                botfunc_move = botfunc.game.botTurn(bot_char)
+                if (bot_char == 'O'):
+                    testimages.circle(botfunc.game.field.point_positions[botfunc_move])
+                else:
+                    testimages.cross(botfunc.game.field.point_positions[botfunc_move])
+                    try:
+                        botfunc.game.winCheck()
+
+            is_victory = gamefunc.win_check()
+            if (not is_victory):
+                bot_char = 'XO'.replace(getCharacter(c), '')
+                botfunc_move = botfunc.game.botTurn(bot_char)
+                if (bot_char == 'O'):
+                    testimages.circle(botfunc.game.field.point_positions[botfunc_move])
+                else:
+                    testimages.cross(botfunc.game.field.point_positions[botfunc_move])
+            is_victory = gamefunc.win_check()
+            if (not is_victory):
+                botfunc.message_edit(c)
+            else:
+                botfunc.message_edit(c, keyboard = False)
+                botfunc.message_send(c, is_victory)
+                os.remove("pol2.jpg")
+
 #---------------
 
-def win_check():
+def win_check():    #  альтернатива из класса не реализована до конца
     field = botfunc.game.field.fieldMap
     winning_set = {
         (0,1,2) : (25,25,615,25),
@@ -140,30 +199,3 @@ def win_check():
         return "Ничья!"
                 
     return False
-
-
-def bot_turn(point_positions_keys, token):
-    is_suitable = False
-    turn = 0
-    while (not is_suitable):
-        turn =  random.randint(0,8)
-        #  путаница с bool: для одного False - хорошо, для другого - плохо
-        #<- Сделать отдельно обработку исключений и bool переменных 🧐? 
-        is_suitable = not player_turn(turn, token)
-    return point_positions_keys[turn]  #  возвращает текстовый ключ из словаря клеток 
-
-
-def player_turn(cell_number, token):        
-    field = gamemanager.file_manager("read")
-
-    if str(field[cell_number]) not in "XO":
-            field[cell_number] = token
-            gamemanager.file_manager("write", field)
-            return 0
-    else:
-        return "error" #<- в будущем надо заменить на класс исключений
-
-
-def start_game():
-    field = list(range(1,10))
-    gamemanager.file_manager("write", field)
