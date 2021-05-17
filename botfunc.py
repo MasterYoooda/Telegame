@@ -33,22 +33,23 @@ def Newgame(message):
 @bot.callback_query_handler(func=lambda c:True)
 def inline(c):
 
-    if (c.data in gamemanager.point_positions):
-        gamemanager.move_made(c)
-            
-    else:
-        if c.data == 'mode_single':
-            game.modeDefined(c, c.data)   
-            botfunc.message_send(
-                c,
-                'Выберите, за кого хотите играть',
-                keyboard=keyboards.priority_keyboard)         
-        if c.data == 'cross':
-            game.characterDefined(c, 'X')
-            botfunc.game.startGame()
-            botfunc.photo_send(c)
-        if c.data == 'zero':
-            game.characterDefined(c, 'O')
+    if c.data == 'mode_single':
+        game.modeDefined(c, c.data)   
+        message_send(
+            c,
+            'Выберите, за кого хотите играть',
+            keyboard=keyboards.priority_keyboard)         
+    elif c.data == 'cross':
+        game.characterDefined(c, 'X')
+        game.startGame()
+        photo_send(c)
+    elif c.data == 'zero':
+        game.characterDefined(c, 'O')
+        game.startGame()
+        photo_send(c)
+    elif (c.data in game.field.point_positions):
+        # gamemanager.move_made(c)
+        game.moveMade(c)
 
 
 def message_send(c, text, keyboard = False):

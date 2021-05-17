@@ -2,6 +2,7 @@ import gamemanager
 import botfunc
 import testimages
 import random
+import os
 
 
 class Field:
@@ -126,76 +127,42 @@ class Game:
             self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
 
 
-    def moveMade(self, c):
+    def moveMade(self, c): #осталась плохая алгоритмика с сингла
         def getCharacter(c):
-            if self.players_list['X'].token != 0 and 
-                self.players_list['X'].token.message.chat.id == c.message.chat.id:
+            if self.players_list['X'].token != 0 and self.players_list['X'].token.message.chat.id == c.message.chat.id:
                 return 'X'
             else:
                 return 'O'
 
         try:
             self.playerTurn(int(c.data), getCharacter(c))
-        except GameExceptions as g_exc:
+        except gamemanager.GameExceptions as g_exc:
             botfunc.message_send(c, g_exc)
         else:
             if (getCharacter(c) == 'X'):
-                testimages.cross(botfunc.game.field.point_positions[c.data])
+                testimages.cross(self.field.point_positions[c.data])
             else:
-                testimages.circle(botfunc.game.field.point_positions[c.data])
+                testimages.circle(self.field.point_positions[c.data])
 
             try:
-                botfunc.game.winCheck()
-            except GameExceptions as g_exc:
+                self.winCheck()
+            except gamemanager.GameExceptions as g_exc:
                 botfunc.message_edit(c, keyboard=False)
                 botfunc.message_send(c, g_exc)
             else:
-                bot_char = 'XO'.replace(getCharacter(C), '')
-                botfunc_move = botfunc.game.botTurn(bot_char)
-                if (bot_char == 'O'):
-                    testimages.circle(botfunc.game.field.point_positions[botfunc_move])
-                else:
-                    testimages.cross(botfunc.game.field.point_positions[botfunc_move])
-                    try:
-                        botfunc.game.winCheck()
-
-            is_victory = gamefunc.win_check()
-            if (not is_victory):
                 bot_char = 'XO'.replace(getCharacter(c), '')
-                botfunc_move = botfunc.game.botTurn(bot_char)
+                botfunc_move = self.botTurn(bot_char)
+
                 if (bot_char == 'O'):
-                    testimages.circle(botfunc.game.field.point_positions[botfunc_move])
+                    testimages.circle(self.field.point_positions[botfunc_move])
                 else:
-                    testimages.cross(botfunc.game.field.point_positions[botfunc_move])
-            is_victory = gamefunc.win_check()
-            if (not is_victory):
-                botfunc.message_edit(c)
-            else:
-                botfunc.message_edit(c, keyboard = False)
-                botfunc.message_send(c, is_victory)
-                os.remove("pol2.jpg")
+                    testimages.cross(self.field.point_positions[botfunc_move])
 
-#---------------
-
-def win_check():    #  альтернатива из класса не реализована до конца
-    field = botfunc.game.field.fieldMap
-    winning_set = {
-        (0,1,2) : (25,25,615,25),
-        (3,4,5) : (25,320,615,320),
-        (6,7,8) : (25,615,615,615),
-        (0,3,6) : (25,25,25,615),
-        (1,4,7) : (320,25,320,615),
-        (2,5,8) : (615,25,615,615),
-        (0,4,8) : (25,25,615,615),
-        (2,4,6) : (615,25,25,615)
-    }    
-
-    for each in list(winning_set.keys()):
-        if field[each[0]] == field[each[1]] == field[each[2]]:
-            testimages.winline(winning_set[each])
-            return (field[each[0]] + " Победил!")
-
-    if (len(frozenset(field)) == 2):
-        return "Ничья!"
-                
-    return False
+                try:
+                    self.winCheck()
+                except gamemanager.GameExceptions as g_exc:
+                    botfunc.message_edit(c, keyboard = False)
+                    botfunc.message_send(c, g_exc)
+                    os.remove("pol2.jpg")
+                else:
+                    botfunc.message_edit(c)
