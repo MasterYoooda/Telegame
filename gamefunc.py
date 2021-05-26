@@ -78,6 +78,7 @@ class Game:
     game_mode = None
     players_list = {'X':Player, 'O':Player}
 
+
     def startGame(self):
         self.field = Field()
 
