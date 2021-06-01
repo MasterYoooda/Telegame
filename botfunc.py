@@ -7,7 +7,7 @@ from telebot.types import Message
 
 
 bot = telebot.TeleBot(telegramBotToken.token)
-game = gamefunc.Game()
+game = None
 
 
 @bot.message_handler(commands=['start'])
@@ -34,6 +34,8 @@ def Newgame(message):
 def inline(c):
 
     if c.data == 'mode_single':
+        global game 
+        game = gamefunc.SingleGame()
         game.modeDefined(c, c.data)   
         message_send(
             c,

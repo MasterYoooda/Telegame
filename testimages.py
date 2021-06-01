@@ -22,7 +22,7 @@ class Circle(Figure):
             xy=(x-r/math.sqrt(2),y-r/math.sqrt(2),x+r/math.sqrt(2),y+r/math.sqrt(2)),
             fill="white",
             outline="black",
-            #width=10
+            width=10
         )
         im.save('pol2.jpg', quality=200)
 
