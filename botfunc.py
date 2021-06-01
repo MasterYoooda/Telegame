@@ -1,10 +1,13 @@
 import telebot
 import keyboards
 import gamemanager
+import gamefunc
+import telegramBotToken
 from telebot.types import Message
 
 
-bot = telebot.TeleBot("1632459413:AAGpEtpehyUJoEvHWlOE6FHWLjl1Mj3_uq8")
+bot = telebot.TeleBot(telegramBotToken.token)
+game = None
 
 
 @bot.message_handler(commands=['start'])
@@ -30,24 +33,36 @@ def Newgame(message):
 @bot.callback_query_handler(func=lambda c:True)
 def inline(c):
 
-    if (c.data in gamemanager.point_positions):
-        gamemanager.move_made(c)
-            
-    else:
-        if c.data == 'mode_single':
-            gamemanager.mode_defined(c, c.data)           
-        if c.data == 'cross':
-            gamemanager.character_defined(c, 'X')
+    if c.data == 'mode_single':
+        global game 
+        game = gamefunc.SingleGame()
+        game.modeDefined(c, c.data)   
+        message_send(
+            c,
+            'Выберите, за кого хотите играть',
+            keyboard=keyboards.priority_keyboard)         
+    elif c.data == 'cross':
+        game.characterDefined(c, 'X')
+        game.startGame()
+        photo_send(c)
+    elif c.data == 'zero':
+        game.characterDefined(c, 'O')
+        game.startGame()
+        bot_turn = game.botTurn('X')
+        game.imageMake('X', bot_turn)
+        photo_send(c, 'pol2.jpg')
+    elif (c.data in game.field.point_positions):
+        game.moveMade(c)
 
 
 def message_send(c, text, keyboard = False):
     bot.send_message(c.message.chat.id, text, reply_markup=keyboard)
 
 
-def photo_send(c):
+def photo_send(c, image = 'pol.jpg'):
     bot.send_photo(
         c.message.chat.id,
-        photo = open('pol.jpg', 'rb'),
+        photo = open(image, 'rb'),
         caption = 'Выберете на клавиатуре, в какую клетку на поле поставить крестик',
         reply_markup=keyboards.game_keyboard
     )
