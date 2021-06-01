@@ -86,23 +86,8 @@ class Game():
     def playerTurn(self, cell_number:int, character:str):        
         if str(self.field.fieldMap[cell_number]) not in "XO":
                 self.field.fieldMap[cell_number] = character
-                #self.field.fileManager("write")
         else:
             raise gamemanager.GameExceptions('Ячейка занята!')
-
-
-    def botTurn(self, character:str):
-        is_rightmove, turn = False, 0
-
-        while (not is_rightmove):
-            turn = self.players_list[character].makeMove()
-            try:
-                self.playerTurn(turn, character)
-            except gamemanager.GameExceptions as g_exc:
-                pass
-            else:
-                is_rightmove = True
-        return str(turn)  #  возвращает текстовый ключ из словаря клеток 
 
 
     def winCheck(self):
@@ -165,6 +150,11 @@ class SingleGame(Game):
         if (self.game_mode == 'mode_single'):
             self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
 
+    def imageMake(self, character:str, data:str):
+        if (character == 'X'):
+            testimages.cross(self.field.point_positions[data])
+        else:
+            testimages.circle(self.field.point_positions[data])
 
     def moveMade(self, c): #остался плохой код с сингла
          
@@ -172,13 +162,7 @@ class SingleGame(Game):
             if self.players_list['X'].token != 0 and self.players_list['X'].token.message.chat.id == c.message.chat.id:
                 return 'X'
             else:
-                return 'O'
-        
-        def imageMake(character:str, data:str):
-            if (character == 'X'):
-                testimages.cross(self.field.point_positions[data])
-            else:
-                testimages.circle(self.field.point_positions[data])
+                return 'O'      
         
         def killGame(g_exc:gamemanager.GameExceptions):
             botfunc.message_edit(c, keyboard = False)
@@ -190,7 +174,7 @@ class SingleGame(Game):
         except gamemanager.GameExceptions as g_exc:
             botfunc.message_send(c, g_exc)
         else:
-            imageMake(getCharacter(c), c.data)
+            self.imageMake(getCharacter(c), c.data)
 
             try:
                 self.winCheck()
@@ -200,7 +184,7 @@ class SingleGame(Game):
                 bot_char = 'XO'.replace(getCharacter(c), '')
                 botfunc_move = self.botTurn(bot_char)
 
-                imageMake(bot_char, botfunc_move)
+                self.imageMake(bot_char, botfunc_move)
 
                 try:
                     self.winCheck()

@@ -48,9 +48,10 @@ def inline(c):
     elif c.data == 'zero':
         game.characterDefined(c, 'O')
         game.startGame()
-        photo_send(c)
+        bot_turn = game.botTurn('X')
+        game.imageMake('X', bot_turn)
+        photo_send(c, 'pol2.jpg')
     elif (c.data in game.field.point_positions):
-        # gamemanager.move_made(c)
         game.moveMade(c)
 
 
@@ -58,10 +59,10 @@ def message_send(c, text, keyboard = False):
     bot.send_message(c.message.chat.id, text, reply_markup=keyboard)
 
 
-def photo_send(c):
+def photo_send(c, image = 'pol.jpg'):
     bot.send_photo(
         c.message.chat.id,
-        photo = open('pol.jpg', 'rb'),
+        photo = open(image, 'rb'),
         caption = 'Выберете на клавиатуре, в какую клетку на поле поставить крестик',
         reply_markup=keyboards.game_keyboard
     )
