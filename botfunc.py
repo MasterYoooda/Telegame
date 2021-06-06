@@ -40,17 +40,18 @@ def inline(c):
         message_send(
             c,
             'Выберите, за кого хотите играть',
-            keyboard=keyboards.priority_keyboard)         
+            keyboard=keyboards.priority_keyboard)    
+
     elif c.data == 'cross':
         game.characterDefined(c, 'X')
         game.startGame()
         photo_send(c)
+
     elif c.data == 'zero':
         game.characterDefined(c, 'O')
         game.startGame()
-        bot_turn = game.botTurn('X')
-        game.imageMake('X', bot_turn)
-        photo_send(c, 'pol2.jpg')
+        game.moveMade(c)
+
     elif (c.data in game.field.point_positions):
         game.moveMade(c)
 

@@ -46,7 +46,7 @@ class Field:
         if (op == "read"):
             file = open("game_data.txt", 'r')
             field = file.readline().split(' ')
-            field.pop(len(field) - 1)#  удаление лишнего пробела
+            field.pop(len(field) - 1)  #  удаление лишнего пробела
             file.close()
             return field   
         return 0
@@ -75,8 +75,9 @@ class GameBot(Player):
 
 class Game():
     field:Field
-    game_mode = None
+    game_mode = None  # 'mode_single' or 
     players_list = {'X':Player, 'O':Player}
+    current_move = 'X'  # X or O
 
 
     def startGame(self):
@@ -113,7 +114,14 @@ class Game():
             self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
 
 
-    def moveMade(self, c): #осталась плохая алгоритмика с сингла
+    def imageMake(self, character:str, data:str):
+        if (character == 'X'):
+            testimages.cross(self.field.point_positions[data])
+        else:
+            testimages.circle(self.field.point_positions[data])
+
+
+    def moveMade(self, c):
         def getCharacter(c):
             if self.players_list['X'].token != 0 and self.players_list['X'].token.message.chat.id == c.message.chat.id:
                 return 'X'
@@ -123,7 +131,7 @@ class Game():
 
 class SingleGame(Game):
     field:Field
-    game_mode = None
+    game_mode = 'mode_single'
     players_list = {'X':Player, 'O':Player}
 
 
@@ -150,11 +158,6 @@ class SingleGame(Game):
         if (self.game_mode == 'mode_single'):
             self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
 
-    def imageMake(self, character:str, data:str):
-        if (character == 'X'):
-            testimages.cross(self.field.point_positions[data])
-        else:
-            testimages.circle(self.field.point_positions[data])
 
     def moveMade(self, c): #остался плохой код с сингла
          
@@ -169,26 +172,54 @@ class SingleGame(Game):
             botfunc.message_send(c, g_exc)
             os.remove("pol2.jpg")
 
-        try:
-            self.playerTurn(int(c.data), getCharacter(c))
-        except gamemanager.GameExceptions as g_exc:
-            botfunc.message_send(c, g_exc)
-        else:
-            self.imageMake(getCharacter(c), c.data)
-
-            try:
-                self.winCheck()
+        if self.current_move == getCharacter(c):
+            try:  # проверка на пустоту ячейки
+                self.playerTurn(int(c.data), getCharacter(c))
             except gamemanager.GameExceptions as g_exc:
-                killGame(g_exc)
+                botfunc.message_send(c, g_exc)
+                return
             else:
-                bot_char = 'XO'.replace(getCharacter(c), '')
-                botfunc_move = self.botTurn(bot_char)
+                self.imageMake(getCharacter(c), c.data)
 
-                self.imageMake(bot_char, botfunc_move)
+        else:
+            botfunc_move = self.botTurn(self.current_move)
+            self.imageMake(self.current_move, botfunc_move)
 
-                try:
-                    self.winCheck()
-                except gamemanager.GameExceptions as g_exc:
-                    killGame(g_exc)
-                else:
-                    botfunc.message_edit(c)
+        try:  # проверка на победу
+            self.winCheck()
+        except gamemanager.GameExceptions as g_exc:
+            killGame(g_exc)
+        else:
+            self.current_move = 'XO'.replace(self.current_move, '')
+
+            if self.current_move != getCharacter(c):
+                self.moveMade(c) 
+            else:
+                #  если играем за нолик, то боту-крестику надо отправить картинку со своим ходом
+                if not(self.current_move in self.field.fieldMap):
+                    botfunc.photo_send(c, 'pol2.jpg')
+                    return
+                botfunc.message_edit(c)       
+
+        # try:
+        #     self.playerTurn(int(c.data), getCharacter(c))
+        # except gamemanager.GameExceptions as g_exc:
+        #     botfunc.message_send(c, g_exc)
+        # else:
+        #     self.imageMake(getCharacter(c), c.data)
+        #     try:
+        #         self.winCheck()
+        #     except gamemanager.GameExceptions as g_exc:
+        #         killGame(g_exc)
+        #     else:
+        #         bot_char = 'XO'.replace(getCharacter(c), '')
+        #         botfunc_move = self.botTurn(bot_char)
+
+        #         self.imageMake(bot_char, botfunc_move)
+
+        #         try:
+        #             self.winCheck()
+        #         except gamemanager.GameExceptions as g_exc:
+        #             killGame(g_exc)
+        #         else:
+        #             botfunc.message_edit(c)
