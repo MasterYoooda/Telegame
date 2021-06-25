@@ -3,6 +3,7 @@ import botfunc
 import testimages
 import random
 import os
+from abc import ABC, abstractmethod
 
 
 class Field:
@@ -18,6 +19,7 @@ class Field:
         '7' : (320,530),
         '8' : (530,530)
     }
+
     winning_set = {
         (0,1,2) : (25,25,615,25),
         (3,4,5) : (25,320,615,320),
@@ -29,67 +31,51 @@ class Field:
         (2,4,6) : (615,25,25,615)
     }
 
-
     def __init__(self):
         self.fieldMap = list(range(0,9))
         #self.fileManager('write')
 
 
-    def fileManager(self, op):
-        if (op == "write"):
-            file = open("game_data.txt", 'w')
-
-            for d in self.fieldMap:
-                file.write(str(d) + " ")
-            file.close()
-
-        if (op == "read"):
-            file = open("game_data.txt", 'r')
-            field = file.readline().split(' ')
-            field.pop(len(field) - 1)  #  удаление лишнего пробела
-            file.close()
-            return field   
-        return 0
-
-
 class Player:
-    token = None
-    character = ''
-
     def __init__(self, token, character):
         self.token = token 
         self.character = character
 
 
 class GameBot(Player):
-    token = 0
-
     def __init__(self, character:str):
         self.character = character
 
-
-    def makeMove(self):
-        #  well, this is temporary
+    def makeMove(self)->int:
         return random.randint(0,8)
 
 
-class Game():
+class Game(ABC):
     field:Field
     game_mode = None  # 'mode_single' or 
     players_list = {'X':Player, 'O':Player}
     current_move = 'X'  # X or O
 
+    def modeDefined(self, c, mode:str):
+        self.game_mode = mode
+
+    @abstractmethod
+    def characterDefined(self, c, character:str):
+        self.players_list[character] = Player(c, character)
 
     def startGame(self):
         self.field = Field()
 
-
-    def playerTurn(self, cell_number:int, character:str):        
+    def playerTurn(self, cell_number:int, character:str):    
+        # значение ячейки не содержится в "ХО", тогда  она свободна    
         if str(self.field.fieldMap[cell_number]) not in "XO":
                 self.field.fieldMap[cell_number] = character
         else:
             raise gamemanager.GameExceptions('Ячейка занята!')
 
+    @abstractmethod
+    def moveMade(self, c):
+        pass
 
     def winCheck(self):
         field = self.field.fieldMap
@@ -99,49 +85,31 @@ class Game():
             if field[each[0]] == field[each[1]] == field[each[2]]:
                 testimages.winline(self.field.winning_set[each])
                 raise gamemanager.GameExceptions(field[each[0]] + " Победил!")
-
         if (len(frozenset(field)) == 2):
             raise gamemanager.GameExceptions("Ничья!")
-
-
-    def modeDefined(self, c, mode):
-        self.game_mode = mode
-
-
-    def characterDefined(self, c, token):
-        self.players_list[token] = Player(c, token)
-        if (self.game_mode == 'mode_single'):
-            self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
-
 
     def imageMake(self, character:str, data:str):
         if (character == 'X'):
             testimages.cross(self.field.point_positions[data])
         else:
-            testimages.circle(self.field.point_positions[data])
+            testimages.circle(self.field.point_positions[data])    
 
-
-    def moveMade(self, c):
-        def getCharacter(c):
-            if self.players_list['X'].token != 0 and self.players_list['X'].token.message.chat.id == c.message.chat.id:
-                return 'X'
-            else:
-                return 'O'
-    
 
 class SingleGame(Game):
     field:Field
     game_mode = 'mode_single'
     players_list = {'X':Player, 'O':Player}
 
+    def characterDefined(self, c, character:str):
+            super().characterDefined(c, character)
+            # если синг - автоматом создаем бота из другого игрока
+            if (self.game_mode == 'mode_single'):
+                botCharacter = 'XO'.replace(character,'')
+                self.players_list[botCharacter] = GameBot(botCharacter)
 
-    def startGame(self):
-        self.field = Field()
-
-
-    def botTurn(self, character:str):
+    def botTurn(self, character:str) -> str:
         is_right_move, turn = False, 0
-
+        # бот рандомный, поэтому надо проверять его ходы
         while (not is_right_move):
             turn = self.players_list[character].makeMove()
             try:
@@ -150,76 +118,54 @@ class SingleGame(Game):
                 pass
             else:
                 is_right_move = True
-        return str(turn)  #  возвращает текстовый ключ из словаря клеток 
+        return str(turn)
 
-
-    def characterDefined(self, c, token):
-        self.players_list[token] = Player(c, token)
-        if (self.game_mode == 'mode_single'):
-            self.players_list['XO'.replace(token,'')] = GameBot('XO'.replace(token,''))
-
-
-    def moveMade(self, c): #остался плохой код с сингла
-         
+    def moveMade(self, c) -> str:
+        # возвращает персонажа игрока из списка игроков в классе игры       
         def getCharacter(c):
-            if self.players_list['X'].token != 0 and self.players_list['X'].token.message.chat.id == c.message.chat.id:
+            if self.players_list['X'].token != 0 and \
+                self.players_list['X'].token.message.chat.id == c.message.chat.id:
                 return 'X'
             else:
-                return 'O'      
-        
-        def killGame(g_exc:gamemanager.GameExceptions):
-            botfunc.message_edit(c, keyboard = False)
+                return 'O'     
+
+        # производит очистку временных файлов игры и убирает клавиатуру в чате
+        def killGame(g_exc:gamemanager.GameExceptions):            
+            botfunc.entireBot.message_edit(c, keyboard = False)
             botfunc.message_send(c, g_exc)
             os.remove("pol2.jpg")
-
+        # если сейчас ход человека
         if self.current_move == getCharacter(c):
-            try:  # проверка на пустоту ячейки
+            # попытка выполнить ход
+            try:                 
                 self.playerTurn(int(c.data), getCharacter(c))
             except gamemanager.GameExceptions as g_exc:
                 botfunc.message_send(c, g_exc)
                 return
             else:
+                # если все удачно - отмечаем изменения на поле
                 self.imageMake(getCharacter(c), c.data)
-
+        # ход бота
         else:
             botfunc_move = self.botTurn(self.current_move)
             self.imageMake(self.current_move, botfunc_move)
-
-        try:  # проверка на победу
+        # проверка на победу
+        try:  
             self.winCheck()
         except gamemanager.GameExceptions as g_exc:
             killGame(g_exc)
         else:
+            # наступает очередь хода другого игрока
             self.current_move = 'XO'.replace(self.current_move, '')
 
+            # если наступает очередь хода бота - вызываем ход для него
             if self.current_move != getCharacter(c):
                 self.moveMade(c) 
             else:
-                #  если играем за нолик, то боту-крестику надо отправить картинку со своим ходом
+                # если очередь человека, а он еще ни разу не ходил, 
+                # то надо отправить поле с первым ходом бота
                 if not(self.current_move in self.field.fieldMap):
                     botfunc.photo_send(c, 'pol2.jpg')
                     return
+
                 botfunc.message_edit(c)       
-
-        # try:
-        #     self.playerTurn(int(c.data), getCharacter(c))
-        # except gamemanager.GameExceptions as g_exc:
-        #     botfunc.message_send(c, g_exc)
-        # else:
-        #     self.imageMake(getCharacter(c), c.data)
-        #     try:
-        #         self.winCheck()
-        #     except gamemanager.GameExceptions as g_exc:
-        #         killGame(g_exc)
-        #     else:
-        #         bot_char = 'XO'.replace(getCharacter(c), '')
-        #         botfunc_move = self.botTurn(bot_char)
-
-        #         self.imageMake(bot_char, botfunc_move)
-
-        #         try:
-        #             self.winCheck()
-        #         except gamemanager.GameExceptions as g_exc:
-        #             killGame(g_exc)
-        #         else:
-        #             botfunc.message_edit(c)

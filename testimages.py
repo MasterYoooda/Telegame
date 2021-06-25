@@ -1,9 +1,11 @@
 import math
 from PIL import Image, ImageDraw
+from abc import ABC, abstractmethod
 
 
-class Figure():
-    def drawFigure(point):
+class Figure(ABC):
+    @abstractmethod
+    def __call__(self):
         pass
 
 
@@ -60,44 +62,7 @@ class WinLine():
             fill="red",
             width=10
         )
-        im.save('pol2.jpg', quality=200)  
-# def circle(point):
-#     x, y = point[0], point[1]
-#     try:
-#         im = Image.open('pol2.jpg')
-#     except:
-#         im = Image.open('pol.jpg')
-#     draw = ImageDraw.Draw(im)
-#     r = 100
-#     draw.ellipse(
-#         xy=(x-r/math.sqrt(2),y-r/math.sqrt(2),x+r/math.sqrt(2),y+r/math.sqrt(2)),
-#         fill="white",
-#         outline="black",
-#         # width=10
-#     )
-#     im.save('pol2.jpg', quality=200)
-
-
-# def cross(point):
-#     x, y = point[0], point[1]
-#     #<- критично сделить за завершением игры и удалять pol2.jpg
-#     try:
-#         im = Image.open('pol2.jpg')
-#     except:
-#         im = Image.open('pol.jpg')
-
-#     draw = ImageDraw.Draw(im)
-
-#     r = 100
-#     draw.line(
-#         xy=(x-r/math.sqrt(2),y-r/math.sqrt(2),x+r/math.sqrt(2),y+r/math.sqrt(2)),
-#         fill="black",
-#         width=10)
-#     draw.line(
-#         xy=(x+r/math.sqrt(2),y-r/math.sqrt(2),x-r/math.sqrt(2),y+r/math.sqrt(2)),
-#         fill="black",
-#         width=10)
-#     im.save('pol2.jpg', quality=200)              
+        im.save('pol2.jpg', quality=200)   
 
 
 circle = Circle()

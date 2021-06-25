@@ -1,3 +1,4 @@
+from os import read
 import telebot
 import keyboards
 import gamemanager
@@ -5,20 +6,15 @@ import gamefunc
 import telegramBotToken
 from telebot.types import Message
 
-
 bot = telebot.TeleBot(telegramBotToken.token)
 game = None
-
 
 @bot.message_handler(commands=['start'])
 def StartCommand(message):
     bot.send_message(
         message.chat.id,
-        'Привет!\n'+
-        'В будущем тут что-то появится\n'+ '\n'
-        'А может и нет 😈\n' + '\n'
-        'Нажми "/newgame" и не еби себе мозг'
-    )
+        'Нажми "/newgame"'
+    )  
 
 
 @bot.message_handler(commands=['newgame'])
@@ -40,18 +36,16 @@ def inline(c):
         message_send(
             c,
             'Выберите, за кого хотите играть',
-            keyboard=keyboards.priority_keyboard)    
-
+            keyboard=keyboards.priority_keyboard
+        )
     elif c.data == 'cross':
         game.characterDefined(c, 'X')
         game.startGame()
         photo_send(c)
-
     elif c.data == 'zero':
         game.characterDefined(c, 'O')
         game.startGame()
         game.moveMade(c)
-
     elif (c.data in game.field.point_positions):
         game.moveMade(c)
 
