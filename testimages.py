@@ -5,7 +5,7 @@ from abc import ABC, abstractmethod
 point_positions = {
         0 : (110,110),
         1 : (320,110),
-        2 : (530,100),
+        2 : (530,110),
         3 : (110,320),
         4 : (320,320),
         5 : (530,320),
@@ -20,16 +20,23 @@ class Figure(ABC):
         pass
 
 class ImageMake():
-    def __call__(self, coors:list):
+    
+    def image_draw(self,coors):
         for i in range(len(coors)):
             if coors[i] == 'X':
                 cross(point_positions[i])
             if coors[i] == 'O':
                 circle(point_positions[i])
 
-
-
-
+    def winline_draw(self,win_coors):
+        im = Image.open('pol2.jpg')
+        draw = ImageDraw.Draw(im)
+        draw.line(
+            xy=(win_coors[0],win_coors[1],win_coors[2],win_coors[3]),
+            fill="red",
+            width=10
+        )
+        im.save('pol2.jpg', quality=200)   
 
 
 
@@ -80,17 +87,17 @@ class Cross(Figure):
         im.save('pol2.jpg', quality=200) 
 
 
-class WinLine():
-    def __call__(self, line:list):
-        x1,y1,x2,y2 = line[0], line[1], line[2], line[3]
-        im = Image.open('pol2.jpg')
-        draw = ImageDraw.Draw(im)
-        draw.line(
-            xy=(x1,y1,x2,y2),
-            fill="red",
-            width=10
-        )
-        im.save('pol2.jpg', quality=200)   
+# class WinLine():
+#     def __call__(self, line:list):
+#         x1,y1,x2,y2 = line[0], line[1], line[2], line[3]
+#         im = Image.open('pol2.jpg')
+#         draw = ImageDraw.Draw(im)
+#         draw.line(
+#             xy=(x1,y1,x2,y2),
+#             fill="red",
+#             width=10
+#         )
+#         im.save('pol2.jpg', quality=200)   
 
 
 
@@ -104,9 +111,10 @@ cross = Cross()
 # cross((320,110))
 # cross((320,320))
 # cross((320,530))
-winline = WinLine()
+# winline = WinLine()
 # winline(320,25,320,615)
 
-imagemake = ImageMake()
 
-# imagemake(['X','X','X',3,'X','O',6,7,'O'])
+
+# ImageMake().image_draw(['X','X','X','X','X','X','X','X','X'])
+# ImageMake().winline_draw((25,110,615,110))
