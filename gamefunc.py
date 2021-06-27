@@ -8,17 +8,17 @@ from abc import ABC, abstractmethod
 
 class Field:
     fieldMap:list
-    point_positions = {
-        '0' : (110,110),
-        '1' : (320,110),
-        '2' : (530, 100),
-        '3' : (110,320),
-        '4' : (320,320),
-        '5' : (530,320),
-        '6' : (110,530),
-        '7' : (320,530),
-        '8' : (530,530)
-    }
+#     point_positions = {
+#         '0' : (110,110),
+#         '1' : (320,110),
+#         '2' : (530, 100),
+#         '3' : (110,320),
+#         '4' : (320,320),
+#         '5' : (530,320),
+#         '6' : (110,530),
+#         '7' : (320,530),
+#         '8' : (530,530)
+#     }
 
     winning_set = {
         (0,1,2) : (25,25,615,25),
@@ -57,8 +57,8 @@ class Game(ABC):
     _players_list = {'X':Player, 'O':Player}
     _current_move = 'X'  # X or O
 
-    def getPointPositions(self):
-        return self._field.point_positions
+#     def getPointPositions(self):
+#         return self._field.point_positions
 
     def modeDefined(self, mode:str):
         self._game_mode = mode
