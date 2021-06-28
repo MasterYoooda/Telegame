@@ -1,9 +1,7 @@
 import gamemanager
-import botfunc
 import testimages
 
 import random
-import os
 
 from abc import ABC, abstractmethod
 
@@ -58,10 +56,12 @@ class GameBot(Player):
 
 
 class Game(ABC):
-    _field:Field
-    _game_mode = None  # 'mode_single' or 
-    _players_list = {'X':Player, 'O':Player}
     _current_move = 'X'  # X or O
+
+    def __init__(self, game_mode):
+        self._field:Field = None
+        self._game_mode = game_mode  # 'mode_single' or 
+        self._players_list = {'X':Player, 'O':Player}
 
     def getPointPositions(self):
         return self._field.point_positions
@@ -69,8 +69,8 @@ class Game(ABC):
     def getFieldMap(self) -> list:
         return self._field.fieldMap
 
-    def modeDefined(self, mode: str):
-        self._game_mode = mode
+    # def modeDefined(self, mode: str):
+    #     self._game_mode = mode
 
     @abstractmethod
     def characterDefined(self, chat_id: str, character: str):
@@ -101,20 +101,13 @@ class Game(ABC):
                 # testimages.winline(self._field.winning_set[each])
                 raise gamemanager.GameExceptions(field[each[0]] + " Победил!")
         if (len(frozenset(field)) == 2):
-            raise gamemanager.GameExceptions("Ничья!")
-
-    # def makeImage(self):
-    #     testimages.MakeImage.image_draw(self.getFieldMap(), self.getPointPositions())   
-
-    # def imageMake(self, character:str, data:str):
-    #     if (character == 'X'):
-    #         testimages.cross(self._field.point_positions[data])
-    #     else:
-    #         testimages.circle(self._field.point_positions[data])    
+            raise gamemanager.GameExceptions("Ничья!") 
 
 
 class SingleGame(Game):
-    _game_mode = 'mode_single'
+    # def __init__(self):
+    #     super.__init__()
+    #     self._game_mode = 'mode_single'
 
     def characterDefined(self, chat_id: str, character: str):
             super().characterDefined(chat_id, character)
@@ -156,8 +149,6 @@ class SingleGame(Game):
                 return g_exc
             else:
                 pass
-                # если все удачно - отмечаем изменения на поле
-                # self.imageMake(self.getCharacter(c), c.data)
         # ход бота
         else:
             bot_move = self.botTurn(self._current_move)
@@ -181,3 +172,7 @@ class SingleGame(Game):
                 if not(self._current_move in self.getFieldMap()):
                     return
             return gamemanager.GameExceptions('Ход выполнен!')    
+
+
+class MultiGame(Game):
+    pass
