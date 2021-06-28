@@ -43,24 +43,3 @@ class GameKeyboard(KeyboardCreator):
             InlineKeyboardButton(emoji,callback_data='8')
         )
         return game_keyboard
-
-
-# priority_keyboard = InlineKeyboardMarkup()
-# priority_keyboard.add(
-#     InlineKeyboardButton('"Крестики"',callback_data='cross'),
-#     InlineKeyboardButton('"Нолики"',callback_data='zero')
-# )
-
-
-# game_keyboard = InlineKeyboardMarkup()
-# game_keyboard.add(
-#     InlineKeyboardButton('❌',callback_data='0'),
-#     InlineKeyboardButton('❌',callback_data='1'),
-#     InlineKeyboardButton('❌',callback_data='2'),
-#     InlineKeyboardButton('❌',callback_data='3'),
-#     InlineKeyboardButton('❌',callback_data='4'),
-#     InlineKeyboardButton('❌',callback_data='5'),
-#     InlineKeyboardButton('❌',callback_data='6'),
-#     InlineKeyboardButton('❌',callback_data='7'),
-#     InlineKeyboardButton('❌',callback_data='8')
-# )
