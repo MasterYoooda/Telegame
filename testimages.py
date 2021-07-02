@@ -3,6 +3,10 @@ from PIL import Image, ImageDraw
 from abc import ABC, abstractmethod
 
 
+class Point(coors):
+    pass
+
+
 class Figure(ABC):
     @abstractmethod
     def __call__(self):
