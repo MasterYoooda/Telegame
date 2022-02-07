@@ -1,5 +1,6 @@
 import gamefunc
 
+
 class GameExceptions(Exception):
     def __init__(self, text):
         self.text = text
@@ -25,7 +26,7 @@ class Client:
     def getChat_id(self):
         return self._chat_id
 
-    # события при выборе персонажа
+    # Character selection events
     def chooseCharacter(self, c):
         if c.data == 'cross':
             self.getGame().characterDefined(c.message.chat.id,'X')
@@ -34,10 +35,8 @@ class Client:
         elif c.data == 'zero':
             self.getGame().characterDefined(c.message.chat.id,'O')
             self.getGame().startGame()
-            # разрешаем себе не обрабатывать результат хода, 
-            # потому что выиграть никак не получится на данном этапе
-            print(self.getGame().moveMade(c))
-            return (self, 'O', 'pol2.jpg')
+            # print(self.getGame().moveMade(c))
+            return self, 'O', 'pol2.jpg'
 
     def getCurrentGame(self, chat_id: str):
         for game in self.__gamelist:
@@ -46,7 +45,7 @@ class Client:
                 return game
         return False
 
-    # удаляет игру для клиента
+    # Deletes all games for the client
     def delCurrentGame(self):
         try:
             self.delGame()

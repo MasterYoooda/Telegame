@@ -1,14 +1,16 @@
+from itertools import count
 from telebot.types import Message, ReplyKeyboardMarkup, KeyboardButton, InlineKeyboardMarkup, InlineKeyboardButton, ReplyKeyboardRemove
 from abc import ABC, abstractmethod
+
 
 class KeyboardCreator(ABC):
     @abstractmethod
     def makeKeyboard(self) -> InlineKeyboardMarkup:
-        pass
+        """Generating an InlineKeyboardMarkup object"""
 
 
 class StartKeyboard(KeyboardCreator):
-    def makeKeyboard() -> InlineKeyboardMarkup:
+    def makeKeyboard():
         start_keyboard = InlineKeyboardMarkup()
         start_keyboard.add(
             InlineKeyboardButton("Игра с компьютером",callback_data='mode_single'),
@@ -18,17 +20,17 @@ class StartKeyboard(KeyboardCreator):
 
 
 class PriorityKeyboard(KeyboardCreator):
-    def makeKeyboard() -> InlineKeyboardMarkup:
+    def makeKeyboard():
         priority_keyboard = InlineKeyboardMarkup()
         priority_keyboard.add(
-            InlineKeyboardButton('"Крестики"',callback_data='cross'),
-            InlineKeyboardButton('"Нолики"',callback_data='zero')
+            InlineKeyboardButton('"❌"',callback_data='cross'),
+            InlineKeyboardButton('"⭕️"',callback_data='zero')
         )
         return priority_keyboard
 
 
-class GameKeyboard(KeyboardCreator):
-    def makeKeyboard(character:str) -> InlineKeyboardMarkup:
+class GameKeyboard(KeyboardCreator):     
+    def makeKeyboard(character:str):
         emoji = '❌' if character == 'X' else '⭕️'
         game_keyboard = InlineKeyboardMarkup()
         game_keyboard.add(

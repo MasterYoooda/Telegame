@@ -1,20 +1,19 @@
 import telebot
+import os
 
-import keyboards
+from keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
 import gamemanager
 import testimages
 
 import telegramBotToken
-
-import os
 
 
 class EntireBot():
     bot:telebot.TeleBot
     __clientlist = []
 
-    start_keyboard = keyboards.StartKeyboard.makeKeyboard()
-    priority_keyboard = keyboards.PriorityKeyboard.makeKeyboard()
+    start_keyboard = StartKeyboard.makeKeyboard()
+    priority_keyboard = PriorityKeyboard.makeKeyboard()
 
     def __init__(self, token:str):
         self.bot = telebot.TeleBot(token)       
@@ -23,11 +22,11 @@ class EntireBot():
         self.bot.send_message(
             message.chat.id,
             'Нажми "/newgame"'
-        )  
-    # метод в который приходят команды
+        ) 
+
     def messageListener(self, messages:list):
         message = messages[0]
-        # если клиент пишет первый раз - запоминаем его
+        # If the client writes for the first time, we remember it
         if not (self.getCurrentClient(message.chat.id)):
             self.__clientlist.append(
                 gamemanager.Client(message.chat.id, message.message_id)
@@ -45,7 +44,7 @@ class EntireBot():
             'Выберете режим игры:',
             reply_markup=self.start_keyboard
         )
-        
+
     def setCallBack(self):
         @self.bot.callback_query_handler(func=lambda c: True)
         def inline(c):
@@ -64,7 +63,7 @@ class EntireBot():
                 game = client.getGame()
                 self.checkMoveOutput(game.moveMade(c), c, client)
 
-    # проверка состояния игры
+    # Processing the game log
     def checkMoveOutput(self, move_output: str, c, client: gamemanager.Client):
         if not(move_output) or 'выполнен!' in move_output.text:
             self.makeImage(client.getGame().getFieldMap(), client.getGame().getPointPositions())
@@ -80,7 +79,8 @@ class EntireBot():
 
     def makeImage(self, fieldMap: list, point_positions: dict):
         testimages.MakeImage().image_draw(fieldMap, point_positions)
-
+    
+    # No longer in use
     def delFieldImage(self):
         try:
             os.remove('pol2.jpg')
@@ -97,17 +97,14 @@ class EntireBot():
             client.getChat_id(),
             photo=open(image, 'rb'),
             caption='Выберете на клавиатуре, в какую клетку на поле поставить крестик',
-            reply_markup=keyboards.GameKeyboard.makeKeyboard(character)
+            reply_markup= GameKeyboard.makeKeyboard(character)
         )
         self.delFieldImage()
 
     def message_edit(self, c, **kwargs):
-        # Исли это не сообщение перед победой, то надо отобразить клавиатуру
-        if len(kwargs) != 0:
-            keyboard = keyboards.GameKeyboard.makeKeyboard(kwargs['character'])
-        else:
-            keyboard = False
-        # Изменение сообщения с текущей картой
+        # If not win in kwargs - showing keyboard
+        keyboard = GameKeyboard.makeKeyboard(kwargs['character']) if len(kwargs) != 0 else False
+        # editing the message with current map
         self.bot.edit_message_media(
             chat_id=c.message.chat.id,
             message_id=c.message.message_id,
@@ -116,17 +113,19 @@ class EntireBot():
         )
         self.delFieldImage()
 
+    # Returns game-client instance or False, if id isn't found 
     def getCurrentClient(self, client_chat_id: str) -> gamemanager.Client:
         for client in self.__clientlist:
             if client.getChat_id() == client_chat_id:
                 return client
         return False
 
-    # Производит очистку временных файлов игры и убирает клавиатуру в чате
+    # Cleans the temporary files of the game and removes the keyboard
     def killGame(self, c, message_text: str):        
         self.message_edit(c)
         self.message_send(c, message_text)
         self.getCurrentClient(c.message.chat.id).delCurrentGame()
+
 
 entireBot = EntireBot(telegramBotToken.token)
 

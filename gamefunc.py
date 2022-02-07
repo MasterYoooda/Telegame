@@ -5,6 +5,7 @@ import random
 
 from abc import ABC, abstractmethod
 
+# Don't forget to put it in the configuration file
 class Field:
     fieldMap:list
     point_positions = {
@@ -80,7 +81,7 @@ class Game(ABC):
         self._field = Field()
 
     def playerTurn(self, cell_number: int, character: str):    
-        # значение ячейки не содержится в "ХО", тогда  она свободна    
+        # The cell value isn't contained in "XO", then it's free   
         if str(self.getFieldMap()[cell_number]) not in "XO":
                 self.getFieldMap()[cell_number] = character
         else:
@@ -111,14 +112,14 @@ class SingleGame(Game):
 
     def characterDefined(self, chat_id: str, character: str):
             super().characterDefined(chat_id, character)
-            # если синг - автоматом создаем бота из другого игрока
+            # If it's a single-game - creating a bot as a second player
             if (self._game_mode == 'mode_single'):
                 botCharacter = 'XO'.replace(character,'')
                 self._players_list[botCharacter] = GameBot(botCharacter)
 
     def botTurn(self, character: str) -> str:
         is_right_move, turn = False, 0
-        # бот рандомный, поэтому надо проверять его ходы
+        # Bot tries to make a turn until it selects a free cell
         while (not is_right_move):
             turn = self._players_list[character].makeMove()
             try:
@@ -129,46 +130,46 @@ class SingleGame(Game):
                 is_right_move = True
         return str(turn)
 
-    # Позвращает персонажа игрока из списка игроков в классе игры       
+    #  Return player's character
     def getCharacter(self, c):
-        # token == 0 только у бота
+        # chat_id == 0 - NPC
         if self._players_list['X'].getChat_id() != 0 and \
             self._players_list['X'].getChat_id() == c.message.chat.id:
             return 'X'
         else:
             return 'O'   
 
-    # Получение хода и попытка его выполнить
+    # Getting a move and trying to execute it
     def moveMade(self, c):
-        # если сейчас ход человека
+        # if it's a real man's turn
         if self._current_move == self.getCharacter(c):
-            # попытка выполнить ход
+            # attempt to execute a turn
             try:                 
                 self.playerTurn(int(c.data), self.getCharacter(c))
             except gamemanager.GameExceptions as g_exc:
                 return g_exc
             else:
                 pass
-        # ход бота
+        # the Bot's turn
         else:
             bot_move = self.botTurn(self._current_move)
             # self.imageMake(self._current_move, bot_move) 
-        # проверка на победу
+        # Check for win
         try:  
             self.winCheck()
         except gamemanager.GameExceptions as g_exc:
             text = g_exc
             return text
         else:
-            # наступает очередь хода другого игрока
+            # Change a turn of the move
             self._current_move = 'XO'.replace(self._current_move, '')
-            # если наступает очередь хода бота - вызываем ход для него
+            # If it's the bot's turn - calls for it
             if self._current_move != self.getCharacter(c):
                 move_output = self.moveMade(c) 
                 if move_output:
                     return move_output
             else:
-                # если ходов человека(О) еще нет - нет сообщения для редактирования
+                # if there're no moves of the real man(O) yet, there's no message to edit
                 if not(self._current_move in self.getFieldMap()):
                     return
             return gamemanager.GameExceptions('Ход выполнен!')    
