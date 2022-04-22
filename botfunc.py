@@ -58,9 +58,9 @@ class EntireBot():
                 )
                 return
             if c.data == 'cross' or c.data == 'zero':
-                self.photo_send(client.chooseCharacter(c))
-            if c.data in client.getGame().getPointPositions():
-                game = client.getGame()
+                self.photo_send(client.choose_character(c))
+            if c.data in client.get_game().getPointPositions():
+                game = client.get_game()
                 self.checkMoveOutput(game.moveMade(c), c, client)
 
     # Processing the game log

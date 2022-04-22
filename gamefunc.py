@@ -1,38 +1,7 @@
-import gamemanager
-import testimages
-
+import testimages, game.field as field
+from messages import GameMessage
 import random
-
 from abc import ABC, abstractmethod
-
-# Don't forget to put it in the configuration file
-class Field:
-    fieldMap:list
-    point_positions = {
-        '0' : (110,110),
-        '1' : (320,110),
-        '2' : (530, 110),
-        '3' : (110,320),
-        '4' : (320,320),
-        '5' : (530,320),
-        '6' : (110,530),
-        '7' : (320,530),
-        '8' : (530,530)
-    }
-    winning_set = {
-        (0,1,2) : (25,110,615,110),
-        (3,4,5) : (25,320,615,320),
-        (6,7,8) : (25,530,615,530),
-        (0,3,6) : (110,25,110,615),
-        (1,4,7) : (320,25,320,615),
-        (2,5,8) : (530,25,530,615),
-        (0,4,8) : (25,25,615,615),
-        (2,4,6) : (615,25,25,615)
-    }
-
-    def __init__(self):
-        self.fieldMap = list(range(0,9))
-        #self.fileManager('write')
 
 
 class Player:
@@ -60,7 +29,7 @@ class Game(ABC):
     _current_move = 'X'  # X or O
 
     def __init__(self, game_mode):
-        self._field:Field = None
+        self._field:field.Field = None
         self._game_mode = game_mode  # 'mode_single' or 
         self._players_list = {'X':Player, 'O':Player}
 
@@ -68,7 +37,7 @@ class Game(ABC):
         return self._field.point_positions
 
     def getFieldMap(self) -> list:
-        return self._field.fieldMap
+        return self._field.get_field()
 
     # def modeDefined(self, mode: str):
     #     self._game_mode = mode
@@ -78,14 +47,14 @@ class Game(ABC):
         self._players_list[character] = Player(chat_id, character)
 
     def startGame(self):
-        self._field = Field()
+        self._field = field.Field()
 
     def playerTurn(self, cell_number: int, character: str):    
         # The cell value isn't contained in "XO", then it's free   
         if str(self.getFieldMap()[cell_number]) not in "XO":
                 self.getFieldMap()[cell_number] = character
         else:
-            raise gamemanager.GameExceptions('Ячейка занята!')
+            raise GameMessage('Ячейка занята!')
 
     @abstractmethod
     def moveMade(self):
@@ -100,9 +69,9 @@ class Game(ABC):
                                                     self._field.winning_set[each],
                                                     self.getPointPositions())
                 # testimages.winline(self._field.winning_set[each])
-                raise gamemanager.GameExceptions(field[each[0]] + " Победил!")
+                raise GameMessage(field[each[0]] + " Победил!")
         if (len(frozenset(field)) == 2):
-            raise gamemanager.GameExceptions("Ничья!") 
+            raise GameMessage("Ничья!") 
 
 
 class SingleGame(Game):
@@ -124,7 +93,7 @@ class SingleGame(Game):
             turn = self._players_list[character].makeMove()
             try:
                 self.playerTurn(turn, character)
-            except gamemanager.GameExceptions as g_exc:
+            except GameMessage as g_exc:
                 pass
             else:
                 is_right_move = True
@@ -146,7 +115,7 @@ class SingleGame(Game):
             # attempt to execute a turn
             try:                 
                 self.playerTurn(int(c.data), self.getCharacter(c))
-            except gamemanager.GameExceptions as g_exc:
+            except GameMessage as g_exc:
                 return g_exc
             else:
                 pass
@@ -157,7 +126,7 @@ class SingleGame(Game):
         # Check for win
         try:  
             self.winCheck()
-        except gamemanager.GameExceptions as g_exc:
+        except GameMessage as g_exc:
             text = g_exc
             return text
         else:
@@ -172,7 +141,7 @@ class SingleGame(Game):
                 # if there're no moves of the real man(O) yet, there's no message to edit
                 if not(self._current_move in self.getFieldMap()):
                     return
-            return gamemanager.GameExceptions('Ход выполнен!')    
+            return GameMessage('Ход выполнен!')    
 
 
 class MultiGame(Game):

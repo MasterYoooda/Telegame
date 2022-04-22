@@ -1,11 +1,6 @@
 import gamefunc
 
 
-class GameExceptions(Exception):
-    def __init__(self, text):
-        self.text = text
-
-
 class Client:
     def __init__(self, chat_id: str, message_id: str):
         self._chat_id = chat_id

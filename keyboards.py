@@ -5,12 +5,12 @@ from abc import ABC, abstractmethod
 
 class KeyboardCreator(ABC):
     @abstractmethod
-    def makeKeyboard(self) -> InlineKeyboardMarkup:
+    def make(self) -> InlineKeyboardMarkup:
         """Generating an InlineKeyboardMarkup object"""
 
 
 class StartKeyboard(KeyboardCreator):
-    def makeKeyboard():
+    def make() -> InlineKeyboardMarkup:
         start_keyboard = InlineKeyboardMarkup()
         start_keyboard.add(
             InlineKeyboardButton("Игра с компьютером",callback_data='mode_single'),
@@ -20,7 +20,7 @@ class StartKeyboard(KeyboardCreator):
 
 
 class PriorityKeyboard(KeyboardCreator):
-    def makeKeyboard():
+    def make() -> InlineKeyboardMarkup:
         priority_keyboard = InlineKeyboardMarkup()
         priority_keyboard.add(
             InlineKeyboardButton('"❌"',callback_data='cross'),
@@ -30,7 +30,7 @@ class PriorityKeyboard(KeyboardCreator):
 
 
 class GameKeyboard(KeyboardCreator):     
-    def makeKeyboard(character:str):
+    def make(character:str) -> InlineKeyboardMarkup:
         emoji = '❌' if character == 'X' else '⭕️'
         game_keyboard = InlineKeyboardMarkup()
         game_keyboard.add(
