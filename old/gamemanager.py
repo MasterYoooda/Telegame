@@ -1,4 +1,4 @@
-import gamefunc
+import old.gamefunc as gamefunc
 
 
 class Client:

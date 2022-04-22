@@ -1,7 +1,7 @@
-from keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
-import testimages
-import telegramBotToken
-from game import Single
+from bot.keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
+import tictactoe.testimages as testimages
+import telegramBotToken as telegramBotToken
+from tictactoe.game import Single
 
 class Handler():
 

@@ -1,5 +1,5 @@
-import testimages, game.field as field
-from messages import GameMessage
+import tictactoe.testimages as testimages, game.field as field
+from controller.messages import GameMessage
 import random
 from abc import ABC, abstractmethod
 

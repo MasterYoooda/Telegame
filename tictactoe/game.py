@@ -1,5 +1,5 @@
-from field import Field
-from testimages import MakeImage
+from tictactoe.field import Field
+from tictactoe.testimages import MakeImage
 from abc import ABC, abstractmethod
 
 class Game(ABC):

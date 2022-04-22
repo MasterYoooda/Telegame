@@ -1,6 +1,6 @@
 from typing import NoReturn
-from handler import Handler
-import telebot, telegramBotToken
+from controller.handler import Handler
+import telebot, telegramBotToken as telegramBotToken
 
 class Client():
     def __init__(self, chat_id:str, message_id:str) -> None:

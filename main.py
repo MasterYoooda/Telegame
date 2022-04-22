@@ -1,4 +1,4 @@
-import handler, telegram, telegramBotToken
+import controller.handler as handler, bot.telegram as telegram, telegramBotToken as telegramBotToken
 
 entire_bot = telegram.Bot()
 

@@ -1,11 +1,11 @@
 import telebot
 import os
 
-from keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
-import gamemanager
-import testimages
+from bot.keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
+import old.gamemanager as gamemanager
+import tictactoe.testimages as testimages
 
-import telegramBotToken
+import telegramBotToken as telegramBotToken
 
 
 class EntireBot():
