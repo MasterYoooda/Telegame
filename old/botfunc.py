@@ -1,19 +1,21 @@
 import telebot
 import os
+from pathlib import Path
+BASE_DIR = Path(__file__).resolve().parent.parent
+os.path.join(BASE_DIR,'bot')
+from bot.keyboards import GameKeyboard, CharSelectionKeyboard, GameSelectionKeyboard
+# import old.gamemanager as gamemanager
+# import controller.fielddrawer as fielddrawer
 
-from bot.keyboards import GameKeyboard, StartKeyboard, PriorityKeyboard
-import old.gamemanager as gamemanager
-import tictactoe.testimages as testimages
-
-import telegramBotToken as telegramBotToken
+from . import telegramBotToken as telegramBotToken
 
 
-class EntireBot():
+class EntireBot(telebot.TeleBot):
     bot:telebot.TeleBot
     __clientlist = []
 
-    start_keyboard = StartKeyboard.makeKeyboard()
-    priority_keyboard = PriorityKeyboard.makeKeyboard()
+    start_keyboard = GameSelectionKeyboard.make()
+    # priority_keyboard = PriorityKeyboard.makeKeyboard()
 
     def __init__(self, token:str):
         self.bot = telebot.TeleBot(token)       
@@ -27,10 +29,10 @@ class EntireBot():
     def messageListener(self, messages:list):
         message = messages[0]
         # If the client writes for the first time, we remember it
-        if not (self.getCurrentClient(message.chat.id)):
-            self.__clientlist.append(
-                gamemanager.Client(message.chat.id, message.message_id)
-            )
+        # if not (self.getCurrentClient(message.chat.id)):
+        #     self.__clientlist.append(
+        #         gamemanager.Client(message.chat.id, message.message_id)
+        #     )
         if message.text == '/start' or \
             message.text == '/start@Telgames_bot':
             self.startCommand(message)
@@ -45,26 +47,24 @@ class EntireBot():
             reply_markup=self.start_keyboard
         )
 
-    def setCallBack(self):
-        @self.bot.callback_query_handler(func=lambda c: True)
-        def inline(c):
-            client = self.getCurrentClient(c.message.chat.id)
-            if c.data == 'mode_single':
-                client.setGame('mode_single') 
-                self.message_send(
-                    c,
-                    'Выберите, за кого хотите играть:',
-                    keyboard=self.priority_keyboard
-                )
-                return
-            if c.data == 'cross' or c.data == 'zero':
-                self.photo_send(client.choose_character(c))
-            if c.data in client.get_game().getPointPositions():
-                game = client.get_game()
-                self.checkMoveOutput(game.moveMade(c), c, client)
+    def inline(self, c):
+        client = self.getCurrentClient(c.message.chat.id)
+        if c.data == 'mode_single':
+            client.setGame('mode_single') 
+            self.message_send(
+                c,
+                'Выберите, за кого хотите играть:',
+                keyboard=self.priority_keyboard
+            )
+            return
+        if c.data == 'cross' or c.data == 'zero':
+            self.photo_send(client.choose_character(c))
+        if c.data in client.get_game().getPointPositions():
+            game = client.get_game()
+            self.checkMoveOutput(game.moveMade(c), c, client)
 
     # Processing the game log
-    def checkMoveOutput(self, move_output: str, c, client: gamemanager.Client):
+    def checkMoveOutput(self, move_output: str, c, client):
         if not(move_output) or 'выполнен!' in move_output.text:
             self.makeImage(client.getGame().getFieldMap(), client.getGame().getPointPositions())
             self.message_edit(c, character=client.getGame().getCharacter(c)) 
@@ -77,15 +77,16 @@ class EntireBot():
     def message_send(self, c, text, keyboard=False):
         self.bot.send_message(c.message.chat.id, text, reply_markup=keyboard)
 
-    def makeImage(self, fieldMap: list, point_positions: dict):
-        testimages.MakeImage().image_draw(fieldMap, point_positions)
+    # def makeImage(self, fieldMap: list, point_positions: dict):
+    #     fielddrawer.MakeImage().image_draw(fieldMap, point_positions)
     
     # No longer in use
     def delFieldImage(self):
         try:
             os.remove('pol2.jpg')
         except:
-            print(gamemanager.GameExceptions('нет файла с полем'))
+            pass
+            #print(gamemanager.GameExceptions('нет файла с полем'))
 
     def photo_send(self, params: tuple):
         client = params[0] 
@@ -93,28 +94,28 @@ class EntireBot():
         image = params[2] if len(params) > 2 else 'pol.jpg'
 
         self.makeImage(client.getGame().getFieldMap(), client.getGame().getPointPositions())
-        self.bot.send_photo(
-            client.getChat_id(),
-            photo=open(image, 'rb'),
-            caption='Выберете на клавиатуре, в какую клетку на поле поставить крестик',
-            reply_markup= GameKeyboard.makeKeyboard(character)
-        )
+        # self.bot.send_photo(
+        #     client.getChat_id(),
+        #     photo=open(image, 'rb'),
+        #     caption='Выберете на клавиатуре, в какую клетку на поле поставить крестик',
+        #     reply_markup= GameKeyboard.makeKeyboard(character)
+        # )
         self.delFieldImage()
 
     def message_edit(self, c, **kwargs):
         # If not win in kwargs - showing keyboard
-        keyboard = GameKeyboard.makeKeyboard(kwargs['character']) if len(kwargs) != 0 else False
-        # editing the message with current map
-        self.bot.edit_message_media(
-            chat_id=c.message.chat.id,
-            message_id=c.message.message_id,
-            media=telebot.types.InputMediaPhoto(open('pol2.jpg', 'rb')),
-            reply_markup=keyboard
-        )
+        # keyboard = GameKeyboard.makeKeyboard(kwargs['character']) if len(kwargs) != 0 else False
+        # # editing the message with current map
+        # self.bot.edit_message_media(
+        #     chat_id=c.message.chat.id,
+        #     message_id=c.message.message_id,
+        #     media=telebot.types.InputMediaPhoto(open('pol2.jpg', 'rb')),
+        #     reply_markup=keyboard
+        # )
         self.delFieldImage()
 
     # Returns game-client instance or False, if id isn't found 
-    def getCurrentClient(self, client_chat_id: str) -> gamemanager.Client:
+    def getCurrentClient(self, client_chat_id: str):
         for client in self.__clientlist:
             if client.getChat_id() == client_chat_id:
                 return client
@@ -131,5 +132,5 @@ entireBot = EntireBot(telegramBotToken.token)
 
 if __name__ == '__main__':
     entireBot.bot.set_update_listener(entireBot.messageListener)
-    entireBot.setCallBack()
+    entireBot.bot.callback_query_handler(entireBot.inline)
     entireBot.bot.infinity_polling()
