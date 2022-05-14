@@ -1,5 +1,5 @@
 from attr import field
-from controller.fielddrawer import MakeImage
+# from controller.fielddrawer import MakeImage
 from controller.exceptions import *
 
 class Field:
@@ -50,10 +50,10 @@ class Field:
             if self._fieldMap[each[0]] == \
                     self._fieldMap[each[1]] == \
                     self._fieldMap[each[2]]:
-                MakeImage().winline_draw(
-                        self._fieldMap,
-                        self._winning_set[each],
-                        self.coords)
+                # MakeImage().winline_draw(
+                #         self._fieldMap,
+                #         self._winning_set[each],
+                #         self.coords)
                 raise Win(field[each[0]])
         if len(frozenset(self._fieldMap)) == 2:
             raise Draw()

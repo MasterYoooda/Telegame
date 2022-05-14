@@ -14,8 +14,8 @@ class GameSelectionKeyboard(KeyboardCreator):
     def make(*args) -> InlineKeyboardMarkup:
         start_keyboard = InlineKeyboardMarkup()
         start_keyboard.add(
-                InlineKeyboardButton(text=str(1), callback_data='mode_single'),
-                InlineKeyboardButton(text=str(1), callback_data='mode_multi')
+                InlineKeyboardButton(text='Single', callback_data='mode_single'),
+                InlineKeyboardButton(text='Multi', callback_data='mode_multi')
         )
         return start_keyboard
 

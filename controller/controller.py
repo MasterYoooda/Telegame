@@ -1,7 +1,10 @@
 from cgi import print_directory
 import telebot
 from typing import NoReturn
-from controller.exceptions import NoClientInBase, WrongCommandName
+
+from tictactoe.field import Field
+from .fielddrawer import ImageController
+from .exceptions import NoClientInBase, WrongCommandName
 from storage.local import ClientBase
 from bot.telegram import Command, BotController
 from .clientcontroller import ClientController
@@ -14,6 +17,7 @@ class Controller():
                 client_controller:ClientController, 
                 base:ClientBase=None) -> None:
         self.base = base if base else ClientBase()
+        self._image_ctrlr = ImageController()
         self._client_ctrlr = client_controller
         self._bot_ctrlr = BotController(
                 telegram_bot,
@@ -46,6 +50,7 @@ class Controller():
             client = self.base.get(chat_id)
             event = Event.get(message)
             self._client_ctrlr.callback_handler(client, event, message)
+            self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
             self._bot_ctrlr.keyboard_reply(
                     event, 
                     client.get_chat_id(),

@@ -51,24 +51,24 @@ class WinLine():
         im.save('pol2.jpg', quality=200)   
 
 
-class MakeImage:
+class ImageController:
     __cross = Cross()
     __circle = Circle()
     __winline = WinLine()
 
-    def image_draw(self, coors: list, point_positions: dict, im: Image = None):
-        if not im:
-            im = Image.open('pol.jpg')
-        for i in range(len(coors)):
-            if coors[i] == 'X':
-                self.__cross(point_positions[str(i)], im)
-            if coors[i] == 'O':
-                self.__circle(point_positions[str(i)], im)
+    def image_draw(self, field_map: list, field_markup: dict, im: Image = Image.open('storage\pol.jpg')):
+        # if not im:
+        #     im = Image.open('storage\pol.jpg')
+        for i in range(len(field_map)):
+            if field_map[i] == 'X':
+                self.__cross(field_markup[str(i)], im)
+            if field_map[i] == 'O':
+                self.__circle(field_markup[str(i)], im)
         im.save('pol2.jpg', quality=200) 
 
-    def winline_draw(self, coors: list, line: list, point_positions: dict):
+    def winline_draw(self, field_map: list, line: list, field_markup: dict):
         im = Image.open('pol.jpg')
-        self.image_draw(coors, point_positions, im)
+        self.image_draw(field_map, field_markup, im)
         self.__winline(line, im)
 
 

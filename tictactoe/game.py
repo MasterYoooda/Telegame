@@ -38,6 +38,9 @@ class Game(ABC):
     def set_field(self, field:Field):
         self._field = field
 
+    def get_field_map(self) -> list:
+        return self._field.get()
+
     @abstractmethod
     def set_char(self, char:str) -> CharIsOccupied|None:
         if self._char != None:

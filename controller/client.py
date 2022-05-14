@@ -28,6 +28,9 @@ class Client():
     def get_game_char(self) -> str:
         return self._game.get_char()
 
+    def get_map(self) -> list:
+        return self._game.get_field_map()
+
     def move(self, message:str) -> None:
         char = self.get_game_char()
         self._game.move_processor(char, message)
