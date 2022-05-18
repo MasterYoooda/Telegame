@@ -7,9 +7,10 @@ class ClientBase():
 
     def get(self, chat_id:str) -> Client:
         for c in self._clients:
-            if c.get_chat_id() == chat_id:
+            if c.chat_id == chat_id:
                 return c
         raise NoClientInBase(chat_id)      
 
-    def add(self, client:Client) -> None:
+    def add(self, client:Client) -> Client:
         self._clients.append(client)
+        return client

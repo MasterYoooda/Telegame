@@ -1,9 +1,10 @@
 from cgi import print_directory
+from turtle import circle
 import telebot
 from typing import NoReturn
 
 from tictactoe.field import Field
-from .fielddrawer import ImageController
+from .fieldimage import ImageController
 from .exceptions import NoClientInBase, WrongCommandName
 from storage.local import ClientBase
 from bot.telegram import Command, BotController
@@ -34,15 +35,21 @@ class Controller():
     def command_listener(self, messages:list) -> NoReturn:
         message = messages[0]
         command:Command
+        client:Client
         try:
             command = Command.get(message.text)
             client = self.base.get(message.chat.id)
         except NoClientInBase:
-            self.base.add(Client(message.chat.id, message.message_id))
+            client = self.base.add(Client(message.chat.id))
         except WrongCommandName as e:
             print(str(e))
             return
-        self._bot_ctrlr.command_handler(command, message.chat.id)
+        msg_id = self._bot_ctrlr.command_handler(
+                command, 
+                message.chat.id,
+                client.bot_last_msg
+        )
+        client.bot_last_msg = msg_id if msg_id is not None else client.bot_last_msg
 
     # Inline keyboard callback's handler
     def keyboard_handler(self, chat_id:str, message:str) -> None:
@@ -53,8 +60,9 @@ class Controller():
             self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
             self._bot_ctrlr.keyboard_reply(
                     event, 
-                    client.get_chat_id(),
-                    client.get_game_char()
+                    client.chat_id,
+                    bot_last_msg=client.bot_last_msg,
+                    emoji=client.game_char
             )
         except Exception as e:
-            print(str(e))
+            print(e)

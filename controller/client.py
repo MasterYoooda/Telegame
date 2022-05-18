@@ -2,35 +2,48 @@ from tictactoe.game import Game
 
 class Client():
     _chat_id:str = None
-    _mess_id:str = None
+    _bot_last_msg:int = None
     _game:Game = None
     
-    def __init__(self, chat_id:str, message_id:str, game:Game=None) -> None:
+    def __init__(self, chat_id:str, game:Game=None) -> None:
         self._chat_id = chat_id
-        self._mess_id = message_id
         self._game:Game = game
 
-    def set_game(self, game:Game) -> None:
-        self._game = game
-
-    def get_game(self, game_mode=None) -> Game:
+    @property
+    def game(self, game_mode=None) -> Game:
         return self._game
 
-    def del_game(self) -> None:
+    @game.setter
+    def game(self, game:Game) -> None:
+        self._game = game
+
+    @game.deleter
+    def game(self) -> None:
         self._game = None
 
-    def get_chat_id(self) -> str:
+    @property
+    def chat_id(self) -> str:
         return self._chat_id
 
-    def set_game_char(self, char:str) -> None:
-        self._game.set_char(char)
+    @property
+    def bot_last_msg(self) -> int:
+        return self._bot_last_msg
 
-    def get_game_char(self) -> str:
-        return self._game.get_char()
+    @bot_last_msg.setter
+    def bot_last_msg(self, id:int) -> None:
+        self._bot_last_msg = id
+
+    @property
+    def game_char(self) -> str:
+        return self._game.char
+
+    @game_char.setter
+    def game_char(self, char_name:str) -> None:
+        self._game.char = char_name
 
     def get_map(self) -> list:
-        return self._game.get_field_map()
+        return self._game.field
 
     def move(self, message:str) -> None:
         char = self.get_game_char()
-        self._game.move_processor(char, message)
+        self._game.move_processor(char, int(message))

@@ -1,4 +1,5 @@
 from enum import Enum, auto, unique
+from re import A
 from tictactoe.game import Event
 from typing import NoReturn
 from .keyboards import GameSelectionKeyboard, CharSelectionKeyboard, GameKeyboard
@@ -43,37 +44,52 @@ class BotController(telebot.TeleBot):
             message = call.data
             self._callback_handler(chat_id, message)
 
-    def command_handler(self, cmd:Command, chat_id:str) -> None:
+    def command_handler(self, cmd:Command, chat_id:str, bot_last_msg:int=None) -> int|None:
+        self.delete_message(chat_id, bot_last_msg)
         if cmd == Command.START:
-            self.start_reply(chat_id)
+            return self.start_reply(chat_id)
         elif cmd == Command.NEWGAME:
-            self.newgame_reply(chat_id)
+            return self.newgame_reply(chat_id)
 
-    def start_reply(self, chat_id:str) -> None:
-        self._bot.send_message(chat_id, 'Click on "/newgame"')
+    def start_reply(self, chat_id:str) -> int:
+        return self._bot.send_message(
+                chat_id, 
+                'Click on "/newgame"'
+        ).message_id
 
     def newgame_reply(self,
                         chat_id:str, 
-                        keyboard=None) -> None:
-        kbrd = keyboard if keyboard else GameSelectionKeyboard.make()
-        self._bot.send_message(chat_id,
-                'Choose a game mode:',
+                        keyboard=None) -> int:
+        kbrd = keyboard if keyboard is not None else GameSelectionKeyboard.make()
+        return self._bot.send_message(chat_id,
+                'Choose a game mode',
                 reply_markup=kbrd
-        )
+        ).message_id
 
-    def keyboard_reply(self, event:Event, chat_id:str, emoji:str=None) -> None:
-        if event == Event.SINGLE_MODE or event == Event.MULTI_MODE:
+    def keyboard_reply(self,
+                    event:Event,
+                    chat_id:str,
+                    bot_last_msg:int=None,
+                    emoji:str=None) -> None:
+        self.delete_message(chat_id, bot_last_msg)
+        if event in [Event.SINGLE_MODE, Event.MULTI_MODE]:
             self._bot.send_message(
                     chat_id,
                     'Choose your Char',
                     reply_markup=CharSelectionKeyboard.make()
             )
-        if event == Event.CROSS or Event.ZERO:
-            self._bot.send_message(
+        if event in [Event.CROSS, Event.ZERO, Event.MOVE]:
+            self._bot.send_photo(
                     chat_id,
-                    'Game in prosses',
+                    photo=open('storage/pol.jpg', 'rb'),
+                    caption='Make a move',
                     reply_markup=GameKeyboard.make(emoji)
             )
+
+    def delete_message(self, chat_id:str, message_id:int) -> None:
+        if message_id is None: return
+        self._bot.delete_message(chat_id, message_id)
+            
 
 
 """Unused entities

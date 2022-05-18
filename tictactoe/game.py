@@ -1,4 +1,3 @@
-from tkinter import SINGLE
 from tictactoe.field import Field
 from .gamebot import GameBot
 from abc import ABC, abstractmethod
@@ -27,31 +26,35 @@ class Game(ABC):
     # client game char
     _char:str = None
     # An indicator, whose turn
-    _char_in_turn = 'X'
     _chars = {'cross':'❌', 'zero':'⭕️'}
+    _char_in_turn = _chars['cross']
 
     def __init__(self) -> None:
         self._field:Field = Field()
         # char of the client
         self._char = None
 
-    def set_field(self, field:Field):
-        self._field = field
-
-    def get_field_map(self) -> list:
+    @property
+    def field(self) -> list:
         return self._field.get()
 
-    @abstractmethod
-    def set_char(self, char:str) -> CharIsOccupied|None:
-        if self._char != None:
-            raise CharIsOccupied(char)
-        self._char = self._chars[char]
+    @field.setter
+    def field(self, field:Field):
+        self._field = field
 
-    def get_char(self) -> str:
+    @property
+    def char(self) -> str:
         return self._char
 
-    def get_opposite_char(self, char:str):
-        return ''.join(list(self._chars)).replace(char)
+    @char.setter
+    @abstractmethod
+    def char(self, char_name:str) -> CharIsOccupied|None:
+        if self._char is not None:
+            raise CharIsOccupied(char_name)
+        self._char = self._chars[char_name]
+
+    def get_opposite_char(self, char_name:str):
+        return ''.join(list(self._chars)).replace(char_name,'')
 
     @abstractmethod
     def move_processor(self, char:str, cell_num:int) -> Error|GameStatus|None:
@@ -75,8 +78,13 @@ class Single(Game):
     _game_mode = 'single'
     _bot_char:str =  None
 
-    def set_char(self, char: str) -> None:
-        super().set_char(char)
+    @property
+    def char(self) -> str:
+        return self._char
+
+    @char.setter
+    def char(self, char: str) -> None:
+        Game.char.fset(self, char)
         self._bot_char = self.get_opposite_char(self._char)
         # bot_char = 'XO'.replace(char,'')
         # self.set_char(bot_char)

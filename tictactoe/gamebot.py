@@ -7,7 +7,7 @@ class GameBot():
     def __init__(self, char:str) -> None:
         self.char = char
 
-    def move(self, field:list, chars:dict) -> int:
+    def move(field:list, chars:dict) -> int:
         is_right = False
         turn = 0
         chars_str = ''.join(list(chars))

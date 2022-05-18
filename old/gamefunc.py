@@ -1,4 +1,4 @@
-import controller.fielddrawer as fielddrawer, game.field as field
+import controller.fieldimage as fieldimage, game.field as field
 from controller.exceptions import GameMessage
 import random
 from abc import ABC, abstractmethod
@@ -65,7 +65,7 @@ class Game(ABC):
         winning_set = list(self._field.winning_set.keys())   
         for each in winning_set:
             if field[each[0]] == field[each[1]] == field[each[2]]:
-                fielddrawer.MakeImage().winline_draw(self.getFieldMap(), 
+                fieldimage.MakeImage().winline_draw(self.getFieldMap(), 
                                                     self._field.winning_set[each],
                                                     self.getPointPositions())
                 # testimages.winline(self._field.winning_set[each])
