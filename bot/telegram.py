@@ -70,21 +70,21 @@ class BotController(telebot.TeleBot):
                     event:Event,
                     chat_id:str,
                     bot_last_msg:int=None,
-                    emoji:str=None) -> None:
+                    emoji:str=None) -> int|None:
         self.delete_message(chat_id, bot_last_msg)
         if event in [Event.SINGLE_MODE, Event.MULTI_MODE]:
-            self._bot.send_message(
+            return self._bot.send_message(
                     chat_id,
                     'Choose your Char',
                     reply_markup=CharSelectionKeyboard.make()
-            )
+            ).message_id
         if event in [Event.CROSS, Event.ZERO, Event.MOVE]:
-            self._bot.send_photo(
+            return self._bot.send_photo(
                     chat_id,
                     photo=open('storage/pol.jpg', 'rb'),
                     caption='Make a move',
                     reply_markup=GameKeyboard.make(emoji)
-            )
+            ).message_id
 
     def delete_message(self, chat_id:str, message_id:int) -> None:
         if message_id is None: return

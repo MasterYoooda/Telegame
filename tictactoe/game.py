@@ -53,8 +53,11 @@ class Game(ABC):
             raise CharIsOccupied(char_name)
         self._char = self._chars[char_name]
 
-    def get_opposite_char(self, char_name:str):
-        return ''.join(list(self._chars)).replace(char_name,'')
+    def chars_collection() -> list:
+        return Game._chars.values()
+
+    def get_opposite_char(self, char:str):
+        return ''.join(list(self._chars.values())).replace(char,'')
 
     @abstractmethod
     def move_processor(self, char:str, cell_num:int) -> Error|GameStatus|None:
@@ -65,7 +68,7 @@ class Game(ABC):
         self._char_in_turn = self.get_opposite_char(char)
 
     def update_map(self, char:str, cell_num:int) -> CellIsOccupied|None:
-        if str(self._field.get()[cell_num]) not in ''.join(list(self._chars)):
+        if str(self._field.get()[cell_num]) not in ''.join(list(self._chars.values())):
             self._field.update_map(cell_num, char)
         else:
             raise CellIsOccupied()

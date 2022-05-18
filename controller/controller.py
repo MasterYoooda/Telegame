@@ -1,9 +1,8 @@
-from cgi import print_directory
-from turtle import circle
 import telebot
 from typing import NoReturn
 
 from tictactoe.field import Field
+from tictactoe.game import Game
 from .fieldimage import ImageController
 from .exceptions import NoClientInBase, WrongCommandName
 from storage.local import ClientBase
@@ -18,7 +17,7 @@ class Controller():
                 client_controller:ClientController, 
                 base:ClientBase=None) -> None:
         self.base = base if base else ClientBase()
-        self._image_ctrlr = ImageController()
+        self._image_ctrlr = ImageController(list(Game.chars_collection()))
         self._client_ctrlr = client_controller
         self._bot_ctrlr = BotController(
                 telegram_bot,
@@ -58,11 +57,12 @@ class Controller():
             event = Event.get(message)
             self._client_ctrlr.callback_handler(client, event, message)
             self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
-            self._bot_ctrlr.keyboard_reply(
+            msg_id = self._bot_ctrlr.keyboard_reply(
                     event, 
                     client.chat_id,
                     bot_last_msg=client.bot_last_msg,
                     emoji=client.game_char
             )
+            client.bot_last_msg = msg_id if msg_id is not None else client.bot_last_msg
         except Exception as e:
             print(e)

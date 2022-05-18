@@ -45,5 +45,5 @@ class Client():
         return self._game.field
 
     def move(self, message:str) -> None:
-        char = self.get_game_char()
+        char = self.game_char
         self._game.move_processor(char, int(message))

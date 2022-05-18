@@ -55,14 +55,18 @@ class ImageController:
     __cross = Cross()
     __circle = Circle()
     __winline = WinLine()
+    __chars:dict
+
+    def __init__(self, chars_collection:list) -> None:
+        self.__chars = chars_collection
 
     def image_draw(self, field_map: list, field_markup: dict, im: Image = Image.open('storage\pol.jpg')):
         # if not im:
         #     im = Image.open('storage\pol.jpg')
         for i in range(len(field_map)):
-            if field_map[i] == 'X':
+            if field_map[i] == self.__chars[0]:
                 self.__cross(field_markup[str(i)], im)
-            if field_map[i] == 'O':
+            if field_map[i] == self.__chars[1]:
                 self.__circle(field_markup[str(i)], im)
         im.save('pol2.jpg', quality=200) 
 
