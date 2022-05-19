@@ -4,7 +4,7 @@ from tictactoe.game import Event
 from typing import NoReturn
 from .keyboards import GameSelectionKeyboard, CharSelectionKeyboard, GameKeyboard
 from controller.exceptions import *
-import telebot
+import telebot, os
 
 
 @unique
@@ -58,8 +58,8 @@ class BotController(telebot.TeleBot):
         ).message_id
 
     def newgame_reply(self,
-                        chat_id:str, 
-                        keyboard=None) -> int:
+                    chat_id:str, 
+                    keyboard=None) -> int:
         kbrd = keyboard if keyboard is not None else GameSelectionKeyboard.make()
         return self._bot.send_message(chat_id,
                 'Choose a game mode',
@@ -78,13 +78,22 @@ class BotController(telebot.TeleBot):
                     'Choose your Char',
                     reply_markup=CharSelectionKeyboard.make()
             ).message_id
-        if event in [Event.CROSS, Event.ZERO, Event.MOVE]:
+        if event == Event.CROSS:
             return self._bot.send_photo(
                     chat_id,
                     photo=open('storage/pol.jpg', 'rb'),
                     caption='Make a move',
                     reply_markup=GameKeyboard.make(emoji)
             ).message_id
+        if event in [Event.ZERO, Event.MOVE]:
+            msg_id = self._bot.send_photo(
+                    chat_id,
+                    photo=open('storage/pol2.jpg', 'rb'),
+                    caption='Make a move',
+                    reply_markup=GameKeyboard.make(emoji)
+            ).message_id
+            os.remove('storage/pol2.jpg')
+            return msg_id
 
     def delete_message(self, chat_id:str, message_id:int) -> None:
         if message_id is None: return

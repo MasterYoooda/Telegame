@@ -56,7 +56,8 @@ class Controller():
             client = self.base.get(chat_id)
             event = Event.get(message)
             self._client_ctrlr.callback_handler(client, event, message)
-            self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
+            if event in [Event.ZERO, Event.MOVE]:
+                self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
             msg_id = self._bot_ctrlr.keyboard_reply(
                     event, 
                     client.chat_id,

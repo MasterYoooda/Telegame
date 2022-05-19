@@ -68,7 +68,7 @@ class ImageController:
                 self.__cross(field_markup[str(i)], im)
             if field_map[i] == self.__chars[1]:
                 self.__circle(field_markup[str(i)], im)
-        im.save('pol2.jpg', quality=200) 
+        im.save('storage/pol2.jpg', quality=200) 
 
     def winline_draw(self, field_map: list, line: list, field_markup: dict):
         im = Image.open('pol.jpg')
