@@ -50,10 +50,10 @@ class Field:
             if self._fieldMap[each[0]] == \
                     self._fieldMap[each[1]] == \
                     self._fieldMap[each[2]]:
+                raise Win(self._fieldMap[each[0]])
                 # MakeImage().winline_draw(
                 #         self._fieldMap,
                 #         self._winning_set[each],
                 #         self.coords)
-                raise Win(field[each[0]])
         if len(frozenset(self._fieldMap)) == 2:
             raise Draw()

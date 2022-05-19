@@ -1,3 +1,4 @@
+from errno import ENOEXEC
 from tictactoe.field import Field
 from .gamebot import GameBot
 from abc import ABC, abstractmethod
@@ -89,54 +90,15 @@ class Single(Game):
     def char(self, char: str) -> None:
         Game.char.fset(self, char)
         self._bot_char = self.get_opposite_char(self._char)
-        # bot_char = 'XO'.replace(char,'')
-        # self.set_char(bot_char)
-
-    # def bot_move(self, char:str) -> str:
-    #     is_moved, turn = False, 0
-    #     # Bot tries to make a turn until it selects a free cell
-    #     while not is_moved:
-    #         turn = self._players[char].make_move()
-    #         try:
-    #             self.update_map(turn, char)
-    #         except:
-    #             pass
-    #         else:
-    #             is_moved = True
-    #     return str(turn)
-
-    # def get_char(self, chat_id:str) -> str:
-    #     if self._players['X'].get_chatId() != 0 and \
-    #             self._players['X'].get_chatId() == chat_id:
-    #         return 'X'
-    #     else:
-    #         return 'O'
+        if self.char == self._chars['zero']:
+            super().move_processor(
+                    self.get_opposite_char(self.char), 
+                    GameBot.move(self._field.get(), self._chars)
+            )
 
     def move_processor(self, char:str, cell_num=0) -> Error|GameStatus|None:
         super().move_processor(char, cell_num)
         super().move_processor(
-                self._bot_char,
-                GameBot.move(self._field.get(), self._chars)
+            self._bot_char,
+            GameBot.move(self._field.get(), self._chars)
         )
-        # if self._char_in_turn == char:
-        #     try:
-        #         self.update_map(cell_num, char)
-        #     except CellIsOccupied as er:
-        #         raise er
-        # else:
-        #     self.bot_move(self._char_in_turn)
-        # win = self.check_win()
-        # if win:
-        #     return win       
-        # # Change a turn of the move
-        # self._char_in_turn = 'XO'.replace(self._char_in_turn, '')
-        # # If it's the bot's turn - calls for it
-        # if self._char_in_turn != self.get_char(chat_id):
-        #     move = self.move_processor(chat_id, cell_num)
-        #     if move:
-        #         return move
-        # else:
-        #     # if there're no moves of the real man(O) yet, there's no message to edit
-        #     if not self._char_in_turn in self._field.get_field():
-        #         return
-        # return 'Ход выполнен!'

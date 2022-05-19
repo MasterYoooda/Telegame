@@ -82,14 +82,12 @@ class BotController(telebot.TeleBot):
             return self._bot.send_photo(
                     chat_id,
                     photo=open('storage/pol.jpg', 'rb'),
-                    caption='Make a move',
                     reply_markup=GameKeyboard.make(emoji)
             ).message_id
         if event in [Event.ZERO, Event.MOVE]:
             msg_id = self._bot.send_photo(
                     chat_id,
                     photo=open('storage/pol2.jpg', 'rb'),
-                    caption='Make a move',
                     reply_markup=GameKeyboard.make(emoji)
             ).message_id
             os.remove('storage/pol2.jpg')
