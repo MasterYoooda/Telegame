@@ -1,1 +1,90 @@
-<mxfile host="app.diagrams.net" modified="2022-04-12T09:01:56.407Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/100.0.4896.75 Safari/537.36 Edg/100.0.1185.36" etag="vhloqZrNnp9lO-Qdlm5p" version="17.4.1" type="github"><diagram id="DA5kCTxm0_5WOP7-MF8C" name="Page-1">jZTdjpswEIWfhsutCOSnuWzIdlfdrnqRSt1bLx5gGuPxGrMkffraxg7QqlKlKNjfDHNsnzFJXrSXB81U80wcRJKl/JLkxyTLVussS9wv5deR7DbrEdQaeUiawAl/QYBpoD1y6BaJhkgYVEtYkpRQmgVjWtOwTKtILFUVq4NiOoFTyQT8lfYDuWlG+jHbTfwRsG6i8mq7HyOvrDzXmnoZ9CRJGCMti2WCZNcwTsMM5fdJXmgiM47aSwHCHWs8sfG9z/+I3pasQZr/eUE+v3xR+031lpbnn9XT06f05dtdqPLORB+OIsm2wtY7NDa0rd3oERhHWceAVZhiEaoIvpKG1qmqrndPToK02z0a51UL9lGMTnbWSTC9i1oBhR2WXiYFgSGrA+5rOIh915KbGmiVr4myRI68l6507/4Ee7X6LttEbfBe1JI5GYFvPfsw24maNuI9MtfYEgYu/hhMKyxY2WFnNJ2h8BvKj97p/FChEH+gTjG/kfy4mWbfSVlwZz3KD0ODBk6WO6nB3ijL6B10JXx/NMg5SMt8X4GzL72tcO53NA+0XewMBf8fgOxx66tNCdFdaMVwS9dhOkwtv9oH1szbPbYwC9esvlWe+s0OQsvF6dTaPjb7dOT3vwE=</diagram></mxfile>
+<mxfile host="app.diagrams.net" modified="2022-05-19T08:32:49.209Z" agent="5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/101.0.4951.64 Safari/537.36 Edg/101.0.1210.47" etag="tdqUTbmsLI_hTwHFIq0X" version="18.0.1" type="github">
+  <diagram id="DA5kCTxm0_5WOP7-MF8C" name="Page-1">
+    <mxGraphModel dx="2473" dy="1287" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="0" pageScale="1" pageWidth="827" pageHeight="1169" background="none" math="0" shadow="0">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+        <mxCell id="abIFBgYzffbrZt4JuF65-1" value="TELEGRAM_BOT" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#dae8fc;strokeColor=#6c8ebf;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="-180" width="520" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-2" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-1" source="abIFBgYzffbrZt4JuF65-4" target="abIFBgYzffbrZt4JuF65-5">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-3" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-1" source="abIFBgYzffbrZt4JuF65-4" target="abIFBgYzffbrZt4JuF65-6">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Organization" treeRoot="1" id="abIFBgYzffbrZt4JuF65-4">
+          <mxCell style="whiteSpace=wrap;html=1;align=center;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-1">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="abIFBgYzffbrZt4JuF65-5" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-1">
+          <mxGeometry x="20" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-6" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-1">
+          <mxGeometry x="160" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-7" value="CONTROLLLER" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#fff2cc;strokeColor=#d6b656;" vertex="1" parent="1">
+          <mxGeometry x="690" y="-180" width="520" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-8" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-7" source="abIFBgYzffbrZt4JuF65-10" target="abIFBgYzffbrZt4JuF65-11">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-9" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-7" source="abIFBgYzffbrZt4JuF65-10" target="abIFBgYzffbrZt4JuF65-12">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Organization" treeRoot="1" id="abIFBgYzffbrZt4JuF65-10">
+          <mxCell style="whiteSpace=wrap;html=1;align=center;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-7">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="abIFBgYzffbrZt4JuF65-11" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-7">
+          <mxGeometry x="20" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-12" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-7">
+          <mxGeometry x="160" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-13" value="TICTACTOE" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#e1d5e7;strokeColor=#9673a6;" vertex="1" parent="1">
+          <mxGeometry x="-120" y="390" width="520" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-14" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-13" source="abIFBgYzffbrZt4JuF65-16" target="abIFBgYzffbrZt4JuF65-17">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-15" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-13" source="abIFBgYzffbrZt4JuF65-16" target="abIFBgYzffbrZt4JuF65-18">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Organization" treeRoot="1" id="abIFBgYzffbrZt4JuF65-16">
+          <mxCell style="whiteSpace=wrap;html=1;align=center;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-13">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="abIFBgYzffbrZt4JuF65-17" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-13">
+          <mxGeometry x="20" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-18" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-13">
+          <mxGeometry x="160" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-19" value="STORAGE" style="swimlane;startSize=20;horizontal=1;containerType=tree;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};fillColor=#f0a30a;fontColor=#000000;strokeColor=#BD7000;" vertex="1" parent="1">
+          <mxGeometry x="-790" y="-180" width="520" height="410" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-20" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-19" source="abIFBgYzffbrZt4JuF65-22" target="abIFBgYzffbrZt4JuF65-23">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-21" value="" style="edgeStyle=elbowEdgeStyle;elbow=vertical;startArrow=none;endArrow=none;rounded=0;" edge="1" parent="abIFBgYzffbrZt4JuF65-19" source="abIFBgYzffbrZt4JuF65-22" target="abIFBgYzffbrZt4JuF65-24">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+        <UserObject label="Organization" treeRoot="1" id="abIFBgYzffbrZt4JuF65-22">
+          <mxCell style="whiteSpace=wrap;html=1;align=center;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-19">
+            <mxGeometry x="80" y="40" width="120" height="60" as="geometry" />
+          </mxCell>
+        </UserObject>
+        <mxCell id="abIFBgYzffbrZt4JuF65-23" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-19">
+          <mxGeometry x="20" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+        <mxCell id="abIFBgYzffbrZt4JuF65-24" value="Division" style="whiteSpace=wrap;html=1;align=center;verticalAlign=middle;treeFolding=1;treeMoving=1;newEdgeStyle={&quot;edgeStyle&quot;:&quot;elbowEdgeStyle&quot;,&quot;startArrow&quot;:&quot;none&quot;,&quot;endArrow&quot;:&quot;none&quot;};" vertex="1" parent="abIFBgYzffbrZt4JuF65-19">
+          <mxGeometry x="160" y="140" width="100" height="60" as="geometry" />
+        </mxCell>
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>
