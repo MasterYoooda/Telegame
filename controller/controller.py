@@ -68,8 +68,9 @@ class Controller():
         except Error as e:
             print(e)
         except (Win, Draw) as gs:
-            self._image_ctrlr.winline_draw(client.get_map(), gs.line, Field.__call__())
+            self._image_ctrlr.winline_draw(client.get_map(), gs.line, Field.__call__(), Event.END_GAME)
             msg_id = self._bot_ctrlr.end_game_reply(chat_id, str(gs), client.bot_last_msg)
             del client.game
+            print(str(gs))
         finally:
             client.bot_last_msg = msg_id

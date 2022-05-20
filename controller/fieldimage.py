@@ -65,8 +65,10 @@ class ImageController:
                 field_map: list, 
                 field_markup: dict,
                 event:Event,
-                im: Image = Image.open('storage/pol.jpg')):
-        if event not in [Event.ZERO, Event.MOVE]: return 
+                im=None):
+        if event not in [Event.ZERO, Event.MOVE, Event.END_GAME]: 
+            return 
+        im = Image.open('storage/pol.jpg') if im is None else im
         for i in range(len(field_map)):
             if field_map[i] == self.__chars[0]:
                 self.__cross(field_markup[str(i)], im)
@@ -74,9 +76,10 @@ class ImageController:
                 self.__circle(field_markup[str(i)], im)
         im.save('storage/pol2.jpg', quality=200) 
 
-    def winline_draw(self, field_map: list, line: list, field_markup: dict):
+    def winline_draw(self, field_map: list, line: list, field_markup: dict, event:Event):
         im = Image.open('storage/pol.jpg')
-        self.image_draw(field_map, field_markup, im)
+        self.image_draw(field_map, field_markup, event, im)
+        if line is None: return
         self.__winline(line, im)
 
 

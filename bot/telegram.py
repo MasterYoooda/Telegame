@@ -21,7 +21,7 @@ class Command(Enum):
     @classmethod
     def get(self, cmd:str) -> Enum:
         for command in self:
-            if command.value['text']== cmd:
+            if command.value['text'] in cmd:
                 return command
         raise WrongCommandName(cmd)
         
