@@ -31,7 +31,7 @@ class Client():
 
     @bot_last_msg.setter
     def bot_last_msg(self, id:int) -> None:
-        self._bot_last_msg = id
+        self._bot_last_msg = id if id is not None else self._bot_last_msg
 
     @property
     def game_char(self) -> str:

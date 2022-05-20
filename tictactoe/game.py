@@ -11,8 +11,8 @@ class Event(Enum):
     MULTI_MODE = 'mode_multie'
     CROSS = 'cross'
     ZERO = 'zero'
-    # string of possible move indexes
-    MOVE = ''.join(list(Field.__call__()))
+    MOVE = ''.join(list(Field.__call__())) # string of possible move indexes
+    END_GAME = auto()
 
     @classmethod
     def get(self, text:str) -> Enum:

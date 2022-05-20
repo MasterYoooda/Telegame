@@ -1,10 +1,11 @@
+from shutil import ExecError
 import telebot
 from typing import NoReturn
 
 from tictactoe.field import Field
 from tictactoe.game import Game
 from .fieldimage import ImageController
-from .exceptions import NoClientInBase, WrongCommandName
+from .exceptions import *
 from storage.local import ClientBase
 from bot.telegram import Command, BotController
 from .clientcontroller import ClientController
@@ -28,7 +29,6 @@ class Controller():
 
     def start(self) -> NoReturn:
         """Calls for bot controller to start infinity polling"""
-        print('started')
         self._bot_ctrlr.start()
         
     def command_listener(self, messages:list) -> NoReturn:
@@ -48,22 +48,28 @@ class Controller():
                 message.chat.id,
                 client.bot_last_msg
         )
-        client.bot_last_msg = msg_id if msg_id is not None else client.bot_last_msg
+        client.bot_last_msg = msg_id
 
     # Inline keyboard callback's handler
     def keyboard_handler(self, chat_id:str, message:str) -> None:
+        client:Client
+        msg_id:int=None
         try:
             client = self.base.get(chat_id)
             event = Event.get(message)
             self._client_ctrlr.callback_handler(client, event, message)
-            if event in [Event.ZERO, Event.MOVE]:
-                self._image_ctrlr.image_draw(client.get_map(), Field.__call__())
+            self._image_ctrlr.image_draw(client.get_map(), Field.__call__(), event)
             msg_id = self._bot_ctrlr.keyboard_reply(
                     event, 
                     client.chat_id,
                     bot_last_msg=client.bot_last_msg,
                     emoji=client.game_char
             )
-            client.bot_last_msg = msg_id if msg_id is not None else client.bot_last_msg
-        except Exception as e:
+        except Error as e:
             print(e)
+        except (Win, Draw) as gs:
+            self._image_ctrlr.winline_draw(client.get_map(), gs.line, Field.__call__())
+            msg_id = self._bot_ctrlr.end_game_reply(chat_id, str(gs), client.bot_last_msg)
+            del client.game
+        finally:
+            client.bot_last_msg = msg_id

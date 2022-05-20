@@ -1,9 +1,9 @@
-from attr import field
 # from controller.fielddrawer import MakeImage
 from controller.exceptions import *
 
 class Field:
     _fieldMap:list
+    # don't forget to remove it нахрен
     _point_positions = {
         '0' : (110,110),
         '1' : (320,110),
@@ -15,6 +15,7 @@ class Field:
         '7' : (320,530),
         '8' : (530,530)
     }
+    # don't forget to remove it нахрен
     _winning_set = {
         (0,1,2) : (25,110,615,110),
         (3,4,5) : (25,320,615,320),
@@ -50,10 +51,6 @@ class Field:
             if self._fieldMap[each[0]] == \
                     self._fieldMap[each[1]] == \
                     self._fieldMap[each[2]]:
-                raise Win(self._fieldMap[each[0]])
-                # MakeImage().winline_draw(
-                #         self._fieldMap,
-                #         self._winning_set[each],
-                #         self.coords)
+                raise Win(self._fieldMap[each[0]], self._winning_set[each])
         if len(frozenset(self._fieldMap)) == 2:
             raise Draw()

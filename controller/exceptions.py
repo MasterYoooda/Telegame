@@ -5,7 +5,7 @@ class Error(Exception):
 
 class GameStatus(Exception):
     """Game status base class"""
-    pass
+    line:list=None
 
 
 class CellIsOccupied(Error):
@@ -69,10 +69,11 @@ class Win(GameStatus):
         char: player character
         status: player game status
     """
-    def __init__(self, char:str, status="won!") -> None:
+    def __init__(self, char:str, line:list, status="won!") -> None:
         self.char = char
+        self.line = line
         self.status = status
-        super().__init__(char, status)
+        super().__init__(char, line, status)
 
     def __str__(self) -> str:
         return f'{self.char} {self.status}'

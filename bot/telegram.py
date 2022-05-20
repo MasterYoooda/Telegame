@@ -93,6 +93,16 @@ class BotController(telebot.TeleBot):
             os.remove('storage/pol2.jpg')
             return msg_id
 
+    def end_game_reply(self, chat_id:str, text:str, bot_last_msg:int) -> int:
+        self.delete_message(chat_id, bot_last_msg)
+        msg_id = self._bot.send_photo(
+                chat_id,
+                caption=text,
+                photo=open('storage/pol2.jpg', 'rb')
+        ).message_id
+        os.remove('storage/pol2.jpg')
+        return msg_id
+
     def delete_message(self, chat_id:str, message_id:int) -> None:
         if message_id is None: return
         self._bot.delete_message(chat_id, message_id)

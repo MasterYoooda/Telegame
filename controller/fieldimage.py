@@ -1,6 +1,7 @@
 import math
 from PIL import Image, ImageDraw
 from abc import ABC, abstractmethod
+from tictactoe.game import Event
 
 
 class Figure(ABC):
@@ -48,7 +49,7 @@ class WinLine():
             fill="red",
             width=10
         )
-        im.save('pol2.jpg', quality=200)   
+        im.save('storage/pol2.jpg', quality=200)   
 
 
 class ImageController:
@@ -60,9 +61,12 @@ class ImageController:
     def __init__(self, chars_collection:list) -> None:
         self.__chars = chars_collection
 
-    def image_draw(self, field_map: list, field_markup: dict, im: Image = Image.open('storage\pol.jpg')):
-        # if not im:
-        #     im = Image.open('storage\pol.jpg')
+    def image_draw(self, 
+                field_map: list, 
+                field_markup: dict,
+                event:Event,
+                im: Image = Image.open('storage/pol.jpg')):
+        if event not in [Event.ZERO, Event.MOVE]: return 
         for i in range(len(field_map)):
             if field_map[i] == self.__chars[0]:
                 self.__cross(field_markup[str(i)], im)
@@ -71,7 +75,7 @@ class ImageController:
         im.save('storage/pol2.jpg', quality=200) 
 
     def winline_draw(self, field_map: list, line: list, field_markup: dict):
-        im = Image.open('pol.jpg')
+        im = Image.open('storage/pol.jpg')
         self.image_draw(field_map, field_markup, im)
         self.__winline(line, im)
 
