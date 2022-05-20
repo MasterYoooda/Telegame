@@ -4,6 +4,10 @@ from abc import ABC, abstractmethod
 from tictactoe.game import Event
 
 
+class Point(coors):
+    pass
+
+
 class Figure(ABC):
     @abstractmethod
     def __call__(self):
